@@ -1,0 +1,38 @@
+{
+    "name": "atlas/table",
+    "type": "library",
+    "description": "Table data gateway implementation for Atlas.",
+    "keywords": [ "sql", "data", "mapper", "mapping", "orm" ],
+    "homepage": "http://github.com/atlasphp/Atlas.Table",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Atlas Contributors",
+            "homepage": "https://github.com/atlasphp/Atlas.Table/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.0",
+        "atlas/pdo": "1.x@dev",
+        "atlas/query": "1.x@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "Atlas\\Table\\": "src/"
+        }
+    },
+    "require-dev": {
+        "atlas/testing": "1.x@dev",
+        "pds/skeleton": "~1.0",
+        "phpunit/phpunit": "~7.0"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Atlas\\Table\\": "tests/"
+        }
+    },
+    "suggest": {
+        "atlas/cli": "A command-line tool to build skeleton classes."
+    },
+    "minimum-stability": "dev"
+}
