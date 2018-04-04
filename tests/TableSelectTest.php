@@ -13,11 +13,7 @@ class TableSelectTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $connection = (new SqliteFixture())->exec();
-
-        $container = new Container($connection);
-        $container->setTable(EmployeeTable::CLASS);
-        $table = $container->newTableLocator()->get(EmployeeTable::CLASS);
-
+        $table = TableLocator::new($connection)->get(EmployeeTable::CLASS);
         $this->select = $table->select();
     }
 

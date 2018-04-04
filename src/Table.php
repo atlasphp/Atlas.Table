@@ -212,7 +212,7 @@ abstract class Table
 
     public function updateRowPerform(Row $row, Update $update) : ?PDOStatement
     {
-        if (! $update->columns->hasAny()) {
+        if (! $update->hasColumns()) {
             return null;
         }
 

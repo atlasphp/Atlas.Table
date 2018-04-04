@@ -10,22 +10,45 @@ declare(strict_types=1);
  */
 namespace Atlas\Table;
 
-use Atlas\Table\Exception;
+use Atlas\Query\QueryFactory;
+use Atlas\Pdo\ConnectionLocator;
 
 class TableLocator
 {
-    protected $factories = [];
+    protected $connectionLocator;
 
-    protected $instances = [];
+    protected $queryFactory;
 
-    public function __construct(array $factories)
+    protected $factory;
+
+    protected $tables = [];
+
+    public static function new(...$args) : TableLocator
     {
-        $this->factories = $factories;
+        return new static(
+            ConnectionLocator::new(...$args),
+            new QueryFactory()
+        );
+    }
+
+    public function __construct(
+        ConnectionLocator $connectionLocator,
+        QueryFactory $queryFactory,
+        callable $factory = null
+    ) {
+        $this->connectionLocator = $connectionLocator;
+        $this->queryFactory = $queryFactory;
+        $this->factory = $factory;
+        if ($this->factory === null) {
+            $this->factory = function ($class) {
+                return new $class();
+            };
+        }
     }
 
     public function has(string $class) : bool
     {
-        return isset($this->factories[$class]);
+        return class_exists($class); // && $class instanceof Table;
     }
 
     public function get(string $class) : Table
@@ -35,9 +58,18 @@ class TableLocator
         }
 
         if (! isset($this->instances[$class])) {
-            $this->instances[$class] = call_user_func($this->factories[$class]);
+            $this->instances[$class] = $this->newTable($class);
         }
 
         return $this->instances[$class];
+    }
+
+    protected function newTable($class) : Table
+    {
+        return new $class(
+            $this->connectionLocator,
+            $this->queryFactory,
+            ($this->factory)($class . 'Events')
+        );
     }
 }

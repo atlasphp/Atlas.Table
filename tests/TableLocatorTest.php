@@ -5,20 +5,14 @@ use Atlas\Pdo\ConnectionLocator;
 use Atlas\Query\QueryFactory;
 use Atlas\Testing\DataSource\Employee\EmployeeTable;
 use Atlas\Testing\DataSource\Employee\EmployeeTableEvents;
+use Atlas\Testing\DataSource\SqliteFixture;
 
 class TableLocatorTest extends \PHPUnit\Framework\TestCase
 {
     protected function setUp()
     {
-        $this->tableLocator = new TableLocator([
-            EmployeeTable::CLASS => function () {
-                return new EmployeeTable(
-                    new ConnectionLocator(),
-                    new QueryFactory(),
-                    new EmployeeTableEvents()
-                );
-            },
-        ]);
+        $connection = (new SqliteFixture())->exec();
+        $this->tableLocator = TableLocator::new($connection);
     }
 
     public function testHas()

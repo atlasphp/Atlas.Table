@@ -21,15 +21,8 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $connection = (new SqliteFixture())->exec();
         (new CompositeFixture($connection))->exec();
 
-        $container = new Container($connection);
-        $container->setTables([
-            CourseTable::CLASS,
-            EmployeeTable::CLASS
-        ]);
-
-        $this->tableLocator = $container->newTableLocator();
+        $this->tableLocator = TableLocator::new($connection);
         $this->table = $this->tableLocator->get(EmployeeTable::CLASS);
-
     }
 
     public function testUpdateOnChangedPrimaryKey()
