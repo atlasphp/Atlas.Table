@@ -48,7 +48,7 @@ class TableLocator
 
     public function has(string $class) : bool
     {
-        return class_exists($class); // && $class instanceof Table;
+        return class_exists($class) && is_subclass_of($class, Table::CLASS);
     }
 
     public function get(string $class) : Table
