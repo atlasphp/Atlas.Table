@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 /**
  *
  * This file is part of Atlas for PHP.
@@ -8,9 +6,10 @@ declare(strict_types=1);
  * @license http://opensource.org/licenses/MIT MIT
  *
  */
+declare(strict_types=1);
+
 namespace Atlas\Table;
 
-use Atlas\Query\QueryFactory;
 use Atlas\Pdo\ConnectionLocator;
 
 class TableLocator
@@ -25,7 +24,7 @@ class TableLocator
 
     public static function new(...$args) : TableLocator
     {
-        return new static(
+        return new TableLocator(
             ConnectionLocator::new(...$args),
             new QueryFactory()
         );

@@ -20,9 +20,9 @@ $tableLocator = TableLocator::new('sqlite::memory:'')
 You can then use the locator to retrieve a _Table_ by its class name.
 
 ```php
-use Atlas\Testing\DataSource\Threads\ThreadsTable;
+use Atlas\Testing\DataSource\Thread\ThreadTable;
 
-$threadsTable = $tableLocator->get(ThreadsTable::CLASS)
+$threadTable = $tableLocator->get(ThreadTable::CLASS)
 ```
 
 From there you can fetch, insert, update, and delete _Row_ objects.

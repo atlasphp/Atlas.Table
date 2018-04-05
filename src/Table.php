@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 /**
  *
  * This file is part of Atlas for PHP.
@@ -8,6 +6,8 @@ declare(strict_types=1);
  * @license http://opensource.org/licenses/MIT MIT
  *
  */
+declare(strict_types=1);
+
 namespace Atlas\Table;
 
 use Atlas\Pdo\Connection;
@@ -94,9 +94,8 @@ abstract class Table
 
     public function select(array $whereEquals = []) : TableSelect
     {
-        $select = new TableSelect(
+        $select = $this->queryFactory->newSelect(
             $this->getReadConnection(),
-            $this->queryFactory->newBind(),
             $this
         );
 
