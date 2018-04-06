@@ -57,7 +57,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($actual);
     }
 
-    public function fetchRow_compositeKey()
+    public function testFetchRow_compositeKey()
     {
         $table = $this->tableLocator->get(CourseTable::CLASS);
 
