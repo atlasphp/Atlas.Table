@@ -43,7 +43,7 @@ class RowTest extends \PHPUnit\Framework\TestCase
         unset($row->no_such_col);
     }
 
-    public function testValidModification()
+    public function testInvalidModification_object()
     {
         $row = new EmployeeRow();
         $this->expectException(Exception::CLASS);
@@ -51,6 +51,16 @@ class RowTest extends \PHPUnit\Framework\TestCase
             'Expected type scalar or null; got stdClass instead.'
         );
         $row->name = (object) [];
+    }
+
+    public function testInvalidModification_other()
+    {
+        $row = new EmployeeRow();
+        $this->expectException(Exception::CLASS);
+        $this->expectExceptionMessage(
+            'Expected type scalar or null; got array instead.'
+        );
+        $row->name = [];
     }
 
     public function testSet()
