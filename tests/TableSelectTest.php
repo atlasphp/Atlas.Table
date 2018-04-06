@@ -84,7 +84,8 @@ class TableSelectTest extends \PHPUnit\Framework\TestCase
 
     public function testTableAlreadySet()
     {
-        $this->expectException(Exception::CLASS, 'Table already set.');
+        $this->expectException(Exception::CLASS);
+        $this->expectExceptionMessage('Table already set.');
         $this->select->setTable($this->table);
     }
 }

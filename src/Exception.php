@@ -12,11 +12,6 @@ namespace Atlas\Table;
 
 class Exception extends \Exception
 {
-    public static function classDoesNotExist($class) : Exception
-    {
-        return new Exception("{$class} does not exist.");
-    }
-
     public static function propertyDoesNotExist($class, string $property) : Exception
     {
         if (is_object($class)) {
@@ -57,19 +52,6 @@ class Exception extends \Exception
     {
         $message = "Expected scalar value for primary key '$col', "
             . "value is missing instead.";
-        return new Exception($message);
-    }
-
-    public static function numericCol($col)
-    {
-        $message = "Expected non-numeric column name, got '$col' instead.";
-        return new Exception($message);
-    }
-
-    public static function unexpectedOption(string $value, array $options)
-    {
-        $message = "Expected one of '" . implode("','", $options)
-            . "'; got '{$value}' instead.";
         return new Exception($message);
     }
 

@@ -32,9 +32,9 @@ class TableTest extends \PHPUnit\Framework\TestCase
     {
         $row = $this->table->fetchRow(1);
         $row->id = 2;
-        $this->expectException(
-            Exception::CLASS,
-            "Primary key value for 'id' changed from '1' to '2'"
+        $this->expectException(Exception::CLASS);
+        $this->expectExceptionMessage(
+            "Primary key value for 'id' changed"
         );
         $this->table->updateRow($row);
     }
@@ -73,6 +73,34 @@ class TableTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $this->assertSame($expect, $actual->getArrayCopy());
+    }
+
+    public function testFetchRow_compositeKey_partMissing()
+    {
+        $table = $this->tableLocator->get(CourseTable::CLASS);
+
+        $this->expectException(Exception::CLASS);
+        $this->expectExceptionMessage(
+            "Expected scalar value for primary key 'course_number', value is missing instead."
+        );
+
+        $table->fetchRow([
+            'course_subject' => 'MATH',
+        ]);
+    }
+
+    public function testFetchRow_compositeKey_nonScalar()
+    {
+        $table = $this->tableLocator->get(CourseTable::CLASS);
+
+        $this->expectException(Exception::CLASS);
+        $this->expectExceptionMessage(
+            "Expected scalar value for primary key 'course_subject', got array instead."
+        );
+
+        $table->fetchRow([
+            'course_subject' => ['MATH'],
+        ]);
     }
 
     public function testFetchRows()
@@ -174,8 +202,8 @@ class TableTest extends \PHPUnit\Framework\TestCase
 
         // try to insert again, should fail on unique name
         $this->silenceErrors();
-        $this->expectException(
-            Exception::CLASS,
+        $this->expectException(Exception::CLASS);
+        $this->expectExceptionMessage(
             "Expected 1 row affected, actual 0"
         );
         $this->table->insertRow($row);
@@ -206,8 +234,8 @@ class TableTest extends \PHPUnit\Framework\TestCase
 
         // ... then try to update it, should fail.
         $row->name = 'Foo';
-        $this->expectException(
-            Exception::CLASS,
+        $this->expectException(Exception::CLASS);
+        $this->expectExceptionMessage(
             "Expected 1 row affected, actual 0"
         );
         $this->table->updateRow($row);
@@ -229,8 +257,8 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expect, $actual);
 
         // try to delete the record again
-        $this->expectException(
-            Exception::CLASS,
+        $this->expectException(Exception::CLASS);
+        $this->expectExceptionMessage(
             "Expected 1 row affected, actual 0"
         );
         $this->table->deleteRow($row);

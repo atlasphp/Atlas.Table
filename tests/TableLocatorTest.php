@@ -29,9 +29,9 @@ class TableLocatorTest extends \PHPUnit\Framework\TestCase
         $again = $this->tableLocator->get(EmployeeTable::CLASS);
         $this->assertSame($actual, $again);
 
-        $this->expectException(
-            'Atlas\Table\Exception',
-            'Bar not found in table locator.'
+        $this->expectException(Exception::CLASS);
+        $this->expectExceptionMessage(
+            'Foo not found in table locator.'
         );
         $this->tableLocator->get('Foo');
     }

@@ -46,8 +46,8 @@ class RowTest extends \PHPUnit\Framework\TestCase
     public function testValidModification()
     {
         $row = new EmployeeRow();
-        $this->expectException(
-            Exception::CLASS,
+        $this->expectException(Exception::CLASS);
+        $this->expectExceptionMessage(
             'Expected type scalar or null; got stdClass instead.'
         );
         $row->name = (object) [];
