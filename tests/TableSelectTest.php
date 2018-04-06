@@ -10,11 +10,13 @@ class TableSelectTest extends \PHPUnit\Framework\TestCase
 {
     protected $select;
 
+    protected $table;
+
     protected function setUp()
     {
         $connection = (new SqliteFixture())->exec();
-        $table = TableLocator::new($connection)->get(EmployeeTable::CLASS);
-        $this->select = $table->select();
+        $this->table = TableLocator::new($connection)->get(EmployeeTable::CLASS);
+        $this->select = $this->table->select();
     }
 
     public function testFetchRow()
@@ -78,5 +80,11 @@ class TableSelectTest extends \PHPUnit\Framework\TestCase
 
         $actual = $this->select->fetchCount();
         $this->assertSame(12, $actual);
+    }
+
+    public function testTableAlreadySet()
+    {
+        $this->expectException(Exception::CLASS, 'Table already set.');
+        $this->select->setTable($this->table);
     }
 }

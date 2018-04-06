@@ -72,4 +72,9 @@ class Exception extends \Exception
             . "'; got '{$value}' instead.";
         return new Exception($message);
     }
+
+    public static function tableAlreadySet() : Exception
+    {
+        return new Exception("Table already set.");
+    }
 }
