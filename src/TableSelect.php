@@ -18,9 +18,12 @@ class TableSelect extends Select
 {
     protected $table;
 
-    public function __construct(Connection $connection, Bind $bind, Table $table)
+    public function setTable(Table $table)
     {
-        parent::__construct($connection, $bind);
+        if (isset($this->table)) {
+            throw Exception::tableAlreadySet();
+        }
+
         $this->table = $table;
     }
 

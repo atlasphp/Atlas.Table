@@ -37,7 +37,7 @@ abstract class Table
 
     const AUTOINC_SEQUENCE = null;
 
-    protected $queryFactory;
+    protected $tableQueryFactory;
 
     protected $rowClass;
 
@@ -49,11 +49,11 @@ abstract class Table
 
     public function __construct(
         ConnectionLocator $connectionLocator,
-        QueryFactory $queryFactory,
+        TableQueryFactory $tableQueryFactory,
         TableEvents $tableEvents
     ) {
         $this->connectionLocator = $connectionLocator;
-        $this->queryFactory = $queryFactory;
+        $this->tableQueryFactory = $tableQueryFactory;
         $this->tableEvents = $tableEvents;
         $this->rowClass = substr(static::CLASS, 0, -5) . 'Row';
         if (count($this::PRIMARY_KEY) == 1) {
@@ -73,11 +73,6 @@ abstract class Table
         return $this->connectionLocator->getWrite();
     }
 
-    public function getQueryFactory() : QueryFactory
-    {
-        return $this->queryFactory;
-    }
-
     public function fetchRow($primaryVal) : ?Row
     {
         $select = $this->select();
@@ -94,11 +89,8 @@ abstract class Table
 
     public function select(array $whereEquals = []) : TableSelect
     {
-        $select = $this->queryFactory->newSelect(
-            $this->getReadConnection(),
-            $this
-        );
-
+        $select = $this->tableQueryFactory->newSelect($this->getReadConnection());
+        $select->setTable($this);
         $select->from(static::NAME);
         foreach ($whereEquals as $key => $val) {
             $this->selectWhere($select, $key, $val);
@@ -130,7 +122,7 @@ abstract class Table
 
     public function insert() : Insert
     {
-        $insert = $this->queryFactory->newInsert($this->getWriteConnection());
+        $insert = $this->tableQueryFactory->newInsert($this->getWriteConnection());
         $insert->into(static::NAME);
         return $insert;
     }
@@ -178,7 +170,7 @@ abstract class Table
 
     public function update() : Update
     {
-        $update = $this->queryFactory->newUpdate($this->getWriteConnection());
+        $update = $this->tableQueryFactory->newUpdate($this->getWriteConnection());
         $update->table(static::NAME);
         return $update;
     }
@@ -230,7 +222,7 @@ abstract class Table
 
     public function delete() : Delete
     {
-        $delete = $this->queryFactory->newDelete($this->getWriteConnection());
+        $delete = $this->tableQueryFactory->newDelete($this->getWriteConnection());
         $delete->from(static::NAME);
         return $delete;
     }

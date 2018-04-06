@@ -16,7 +16,7 @@ class TableLocator
 {
     protected $connectionLocator;
 
-    protected $queryFactory;
+    protected $tableQueryFactory;
 
     protected $factory;
 
@@ -26,17 +26,17 @@ class TableLocator
     {
         return new TableLocator(
             ConnectionLocator::new(...$args),
-            new QueryFactory()
+            new TableQueryFactory()
         );
     }
 
     public function __construct(
         ConnectionLocator $connectionLocator,
-        QueryFactory $queryFactory,
+        TableQueryFactory $tableQueryFactory,
         callable $factory = null
     ) {
         $this->connectionLocator = $connectionLocator;
-        $this->queryFactory = $queryFactory;
+        $this->tableQueryFactory = $tableQueryFactory;
         $this->factory = $factory;
         if ($this->factory === null) {
             $this->factory = function ($class) {
@@ -67,7 +67,7 @@ class TableLocator
     {
         return new $class(
             $this->connectionLocator,
-            $this->queryFactory,
+            $this->tableQueryFactory,
             ($this->factory)($class . 'Events')
         );
     }
