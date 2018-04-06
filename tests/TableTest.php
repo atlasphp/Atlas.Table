@@ -2,6 +2,7 @@
 namespace Atlas\Table;
 
 use Atlas\Table\Exception;
+use Atlas\Testing\Assertions;
 use Atlas\Testing\CompositeDataSource\Course\CourseRow;
 use Atlas\Testing\CompositeDataSource\Course\CourseTable;
 use Atlas\Testing\CompositeDataSource\SqliteFixture as CompositeFixture;
@@ -12,6 +13,8 @@ use PDO;
 
 class TableTest extends \PHPUnit\Framework\TestCase
 {
+    use Assertions;
+
     protected $table;
 
     protected $tableLocator;
@@ -235,8 +238,26 @@ class TableTest extends \PHPUnit\Framework\TestCase
 
     public function testSelect_whereEquals()
     {
-        $actual = $this->table->select(['id' => [1, 2, 3]])->fetchRows();
-        $this->assertCount(3, $actual);
+        $actual = $this->table->select([
+            'foo' => [1, 2, 3],
+            'bar' => null,
+            'baz' => 'baz_value',
+            'dib = NOW()',
+        ]);
+
+        $expect = '
+            SELECT
+
+            FROM
+                employee
+            WHERE
+                foo IN (:__1__, :__2__, :__3__)
+                AND bar IS NULL
+                AND baz = :__4__
+                AND dib = NOW()
+        ';
+
+        $this->assertSameSql($expect, $actual->getStatement());
     }
 
     protected function silenceErrors()
