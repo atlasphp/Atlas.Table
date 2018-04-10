@@ -164,7 +164,7 @@ abstract class Table
 
         $this->tableEvents->afterInsert($this, $row, $insert, $pdoStatement);
 
-        $row->init();
+        $row->init($row::INSERTED);
         return $pdoStatement;
     }
 
@@ -216,7 +216,7 @@ abstract class Table
 
         $this->tableEvents->afterUpdate($this, $row, $update, $pdoStatement);
 
-        $row->init();
+        $row->init($row::UPDATED);
         return $pdoStatement;
     }
 
@@ -256,7 +256,7 @@ abstract class Table
         }
 
         $this->tableEvents->afterDelete($this, $row, $delete, $pdoStatement);
-
+        $row->init($row::DELETED);
         return $pdoStatement;
     }
 
@@ -277,6 +277,7 @@ abstract class Table
     {
         $row = $this->newRow($cols);
         $this->tableEvents->modifySelectedRow($this, $row);
+        $row->init($row::SELECTED);
         return $row;
     }
 }

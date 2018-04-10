@@ -20,6 +20,14 @@ class RowTest extends \PHPUnit\Framework\TestCase
         $row->no_such_col = 'name';
     }
 
+    public function testSetWhenDeleted()
+    {
+        $row = new EmployeeRow();
+        $row->init($row::DELETED);
+        $this->expectException(Exception::CLASS);
+        $row->id = 'foo';
+    }
+
     public function testIsset()
     {
         $row = new EmployeeRow();
@@ -34,6 +42,14 @@ class RowTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('bar', $row->name);
         unset($row->name);
         $this->assertNull($row->name);
+    }
+
+    public function testUnsetWhenDeleted()
+    {
+        $row = new EmployeeRow();
+        $row->init($row::DELETED);
+        $this->expectException(Exception::CLASS);
+        unset($row->name);
     }
 
     public function testUnsetMissingCol()
@@ -77,5 +93,26 @@ class RowTest extends \PHPUnit\Framework\TestCase
         $actual = json_encode($row);
         $expect = '{"id":null,"name":null,"building":null,"floor":null}';
         $this->assertSame($expect, $actual);
+    }
+
+    public function testActionStatusDelete()
+    {
+        $row = new EmployeeRow();
+        $this->assertSame('', $row->getStatus());
+        $this->assertSame($row::INSERT, $row->getAction());
+
+        $row->init($row::SELECTED);
+        $this->assertSame($row::SELECTED, $row->getStatus());
+        $this->assertSame('', $row->getAction());
+
+        $row->name = 'New Name';
+        $this->assertSame($row::SELECTED, $row->getStatus());
+        $this->assertSame($row::UPDATE, $row->getAction());
+
+        $row->setDelete(true);
+        $this->assertSame($row::DELETE, $row->getAction());
+
+        $this->expectException(Exception::CLASS);
+        $row->init('NO_SUCH_STATUS');
     }
 }

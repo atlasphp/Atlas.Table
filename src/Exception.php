@@ -41,6 +41,14 @@ class Exception extends \Exception
         return new Exception("Expected 1 row affected, actual {$count}.");
     }
 
+    public static function immutableOnceDeleted($class, $property)
+    {
+        if (is_object($class)) {
+            $class = get_class($class);
+        }
+        return new Exception("{$class}::\${$property} is immutable after Row is deleted.");
+    }
+
     public static function primaryValueNotScalar($col, $val)
     {
         $message = "Expected scalar value for primary key '{$col}', "
@@ -58,5 +66,12 @@ class Exception extends \Exception
     public static function tableAlreadySet() : Exception
     {
         return new Exception("Table already set.");
+    }
+
+    public static function unexpectedOption($value, array $options)
+    {
+        $message = "Expected one of '" . implode("','", $options)
+            . "'; got '{$value}' instead.";
+        return new Exception($message);
     }
 }

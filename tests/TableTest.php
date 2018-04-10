@@ -229,15 +229,16 @@ class TableTest extends \PHPUnit\Framework\TestCase
         // try to update again, should be a no-op because there are no changes
         $this->assertFalse($this->table->updateRow($row));
 
-        // delete the record ...
-        $this->assertTrue($this->table->deleteRow($row));
-
-        // ... then try to update it, should fail.
-        $row->name = 'Foo';
-        $this->expectException(Exception::CLASS);
-        $this->expectExceptionMessage(
-            "Expected 1 row affected, actual 0"
+        // delete "out from under" the object ...
+        $this->table->getWriteConnection()->perform(
+            "DELETE FROM employee WHERE id = ?",
+            [$row->id]
         );
+
+        // then modify and try to update, should fail
+        $row->name = 'Annabelle Lee';
+        $this->expectException(Exception::CLASS);
+        $this->expectExceptionMessage('Expected 1 row affected, actual 0.');
         $this->table->updateRow($row);
     }
 

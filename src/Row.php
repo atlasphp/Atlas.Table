@@ -15,13 +15,32 @@ use JsonSerializable;
 
 abstract class Row implements JsonSerializable
 {
+    const INSERT = 'INSERT';
+    const UPDATE = 'UPDATE';
+    const DELETE = 'DELETE';
+
+    const SELECTED = 'SELECTED';
+    const INSERTED = 'INSERTED';
+    const UPDATED = 'UPDATED';
+    const DELETED = 'DELETED';
+
+    private $action = self::INSERT;
+
+    private $delete = false;
+
     private $init = [];
+
+    private $status = '';
+
+    private $validAction = ['', self::INSERT, self::UPDATE, self::DELETE];
+
+    private $validStatus = ['', self::SELECTED, self::INSERTED, self::UPDATED, self::DELETED];
 
     protected $cols = [];
 
     final public function __construct(array $cols = [])
     {
-        $this->init();
+        $this->init = $this->cols;
         foreach ($cols as $col => $val) {
             $this->init[$col] = $val;
             $this->cols[$col] = $val;
@@ -36,6 +55,10 @@ abstract class Row implements JsonSerializable
 
     public function __set(string $col, $val) : void
     {
+        if ($this->status == self::DELETED) {
+            throw Exception::immutableOnceDeleted($this, $col);
+        }
+
         $this->assertHas($col);
         $this->modify($col, $val);
     }
@@ -48,6 +71,10 @@ abstract class Row implements JsonSerializable
 
     public function __unset(string $col) : void
     {
+        if ($this->status == self::DELETED) {
+            throw Exception::immutableOnceDeleted($this, $col);
+        }
+
         $this->assertHas($col);
         $this->modify($col, null);
     }
@@ -87,18 +114,52 @@ abstract class Row implements JsonSerializable
         return $this->getArrayCopy();
     }
 
-    public function init() : void
+    public function init(string $status) : void
     {
+        $this->setStatus($status);
         $this->init = $this->cols;
+        $this->action = '';
+    }
+
+    public function setDelete(bool $delete) : void
+    {
+        $this->delete = $delete;
+    }
+
+    public function getAction() : string
+    {
+        $delete = $this->delete && $this->status !== '';
+        return $delete ? self::DELETE : $this->action;
+    }
+
+    public function getStatus() : string
+    {
+        return $this->status;
+    }
+
+    protected function setStatus(string $status) : void
+    {
+        $this->assertValidOption($status, $this->validStatus);
+        $this->status = $status;
+    }
+
+    protected function assertValidOption(string $option, array $options) : void
+    {
+        if (! in_array($option, $options)) {
+            throw Exception::unexpectedOption($option, $options);
+        }
     }
 
     protected function modify(string $col, $new) : void
     {
-        $this->assertValid($new);
+        $this->assertValidValue($new);
         $this->cols[$col] = $new;
+        if ($this->action !== self::INSERT && $this->isModified($col)) {
+            $this->action = self::UPDATE;
+        }
     }
 
-    protected function assertValid($value) : void
+    protected function assertValidValue($value) : void
     {
         if (! is_null($value) && ! is_scalar($value)) {
             throw Exception::invalidType('scalar or null', $value);
