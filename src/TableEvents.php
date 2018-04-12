@@ -34,7 +34,12 @@ abstract class TableEvents
     {
     }
 
-    public function afterInsert(Table $table, Row $row, Insert $insert, PDOStatement $pdoStatement) : void
+    public function afterInsert(
+        Table $table,
+        Row $row,
+        Insert $insert,
+        PDOStatement $pdoStatement
+    ) : void
     {
     }
 
@@ -46,7 +51,12 @@ abstract class TableEvents
     {
     }
 
-    public function afterUpdate(Table $table, Row $row, Update $update, PDOStatement $pdoStatement) : void
+    public function afterUpdate(
+        Table $table,
+        Row $row,
+        Update $update,
+        PDOStatement $pdoStatement
+    ) : void
     {
     }
 
@@ -58,7 +68,12 @@ abstract class TableEvents
     {
     }
 
-    public function afterDelete(Table $table, Row $row, Delete $delete, PDOStatement $pdoStatement) : void
+    public function afterDelete(
+        Table $table,
+        Row $row,
+        Delete $delete,
+        PDOStatement $pdoStatement
+    ) : void
     {
     }
 }
