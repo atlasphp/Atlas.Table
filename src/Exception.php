@@ -12,11 +12,8 @@ namespace Atlas\Table;
 
 class Exception extends \Exception
 {
-    public static function propertyDoesNotExist($class, string $property) : Exception
+    public static function propertyDoesNotExist(string $class, string $property) : Exception
     {
-        if (is_object($class)) {
-            $class = get_class($class);
-        }
         return new Exception("{$class}::\${$property} does not exist.");
     }
 
@@ -41,7 +38,7 @@ class Exception extends \Exception
         return new Exception("Expected 1 row affected, actual {$count}.");
     }
 
-    public static function immutableOnceDeleted($class, $property)
+    public static function immutableOnceDeleted(string $class, string $property)
     {
         if (is_object($class)) {
             $class = get_class($class);
@@ -49,14 +46,14 @@ class Exception extends \Exception
         return new Exception("{$class}::\${$property} is immutable after Row is deleted.");
     }
 
-    public static function primaryValueNotScalar($col, $val)
+    public static function primaryValueNotScalar(string $col, $val)
     {
         $message = "Expected scalar value for primary key '{$col}', "
             . "got " . gettype($val) . " instead.";
         return new Exception($message);
     }
 
-    public static function primaryValueMissing($col)
+    public static function primaryValueMissing(string $col)
     {
         $message = "Expected scalar value for primary key '$col', "
             . "value is missing instead.";

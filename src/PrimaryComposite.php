@@ -41,7 +41,7 @@ class PrimaryComposite
         }
     }
 
-    protected function assertCompositePart($primaryVal, $col)
+    protected function assertCompositePart(array $primaryVal, string $col)
     {
         if (! isset($primaryVal[$col])) {
             throw Exception::primaryValueMissing($col);

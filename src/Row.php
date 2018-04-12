@@ -56,7 +56,7 @@ abstract class Row implements JsonSerializable
     public function __set(string $col, $val) : void
     {
         if ($this->status == self::DELETED) {
-            throw Exception::immutableOnceDeleted($this, $col);
+            throw Exception::immutableOnceDeleted(static::CLASS, $col);
         }
 
         $this->assertHas($col);
@@ -72,7 +72,7 @@ abstract class Row implements JsonSerializable
     public function __unset(string $col) : void
     {
         if ($this->status == self::DELETED) {
-            throw Exception::immutableOnceDeleted($this, $col);
+            throw Exception::immutableOnceDeleted(static::CLASS, $col);
         }
 
         $this->assertHas($col);
@@ -166,14 +166,14 @@ abstract class Row implements JsonSerializable
         }
     }
 
-    protected function assertHas($col) : void
+    protected function assertHas(string $col) : void
     {
         if (! $this->has($col)) {
-            throw Exception::propertyDoesNotExist($this, $col);
+            throw Exception::propertyDoesNotExist(static::CLASS, $col);
         }
     }
 
-    protected function isModified($col) : bool
+    protected function isModified(string $col) : bool
     {
         $old = $this->init[$col];
         $new = $this->cols[$col];
