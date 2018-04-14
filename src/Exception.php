@@ -40,9 +40,6 @@ class Exception extends \Exception
 
     public static function immutableOnceDeleted(string $class, string $property)
     {
-        if (is_object($class)) {
-            $class = get_class($class);
-        }
         return new Exception("{$class}::\${$property} is immutable after Row is deleted.");
     }
 
