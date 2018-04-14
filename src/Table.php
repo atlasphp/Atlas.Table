@@ -127,10 +127,10 @@ abstract class Table
         return $insert;
     }
 
-    public function insertRow(Row $row) : bool
+    public function insertRow(Row $row) : PDOStatement
     {
         $insert = $this->insertRowPrepare($row);
-        return (bool) $this->insertRowPerform($row, $insert);
+        return $this->insertRowPerform($row, $insert);
     }
 
     public function insertRowPrepare(Row $row) : Insert
@@ -175,10 +175,10 @@ abstract class Table
         return $update;
     }
 
-    public function updateRow(Row $row) : bool
+    public function updateRow(Row $row) : ?PDOStatement
     {
         $update = $this->updateRowPrepare($row);
-        return (bool) $this->updateRowPerform($row, $update);
+        return $this->updateRowPerform($row, $update);
     }
 
     public function updateRowPrepare(Row $row) : Update
@@ -227,10 +227,10 @@ abstract class Table
         return $delete;
     }
 
-    public function deleteRow(Row $row) : bool
+    public function deleteRow(Row $row) : ?PDOStatement
     {
         $delete = $this->deleteRowPrepare($row);
-        return (bool) $this->deleteRowPerform($row, $delete);
+        return $this->deleteRowPerform($row, $delete);
     }
 
     public function deleteRowPrepare(Row $row) : Delete
@@ -246,8 +246,12 @@ abstract class Table
         return $delete;
     }
 
-    public function deleteRowPerform(Row $row, Delete $delete) : PDOStatement
+    public function deleteRowPerform(Row $row, Delete $delete) : ?PDOStatement
     {
+        if ($row->getStatus() === $row::DELETED) {
+            return null;
+        }
+
         $pdoStatement = $delete->perform();
 
         $rowCount = $pdoStatement->rowCount();

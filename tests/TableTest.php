@@ -10,6 +10,7 @@ use Atlas\Testing\DataSource\Employee\EmployeeRow;
 use Atlas\Testing\DataSource\Employee\EmployeeTable;
 use Atlas\Testing\DataSource\SqliteFixture;
 use PDO;
+use PDOStatement;
 
 class TableTest extends \PHPUnit\Framework\TestCase
 {
@@ -182,8 +183,8 @@ class TableTest extends \PHPUnit\Framework\TestCase
         ]);
 
         // does the insert *look* successful?
-        $success = $this->table->insertRow($row);
-        $this->assertTrue($success);
+        $actual = $this->table->insertRow($row);
+        $this->assertInstanceOf(PDOStatement::CLASS, $actual);
 
         // did the autoincrement ID get retained?
         $this->assertEquals(13, $row->id);
@@ -216,8 +217,8 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $row->name = 'Annabelle';
 
         // did the update *look* successful?
-        $success = $this->table->updateRow($row);
-        $this->assertTrue($success);
+        $actual = $this->table->updateRow($row);
+        $this->assertInstanceOf(PDOStatement::CLASS, $actual);
 
         // was it *actually* updated?
         $expect = $row->getArrayCopy();
@@ -227,7 +228,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expect, $actual);
 
         // try to update again, should be a no-op because there are no changes
-        $this->assertFalse($this->table->updateRow($row));
+        $this->assertNull($this->table->updateRow($row));
 
         // delete "out from under" the object ...
         $this->table->getWriteConnection()->perform(
@@ -246,7 +247,8 @@ class TableTest extends \PHPUnit\Framework\TestCase
     {
         // fetch a record, then delete it
         $row = $this->table->fetchRow(1);
-        $this->table->deleteRow($row);
+        $actual = $this->table->deleteRow($row);
+        $this->assertInstanceOf(PDOStatement::CLASS, $actual);
 
         // did it delete?
         $actual = $this->table->fetchRow(1);
@@ -258,6 +260,11 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expect, $actual);
 
         // try to delete the record again
+        $actual = $this->table->deleteRow($row);
+        $this->assertNull($actual);
+
+        // sneaky sneaky
+        $row->init($row::SELECTED);
         $this->expectException(Exception::CLASS);
         $this->expectExceptionMessage(
             "Expected 1 row affected, actual 0"
