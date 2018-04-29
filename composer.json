@@ -14,7 +14,7 @@
     "require": {
         "php": ">=7.1.0",
         "atlas/pdo": "1.x@dev",
-        "atlas/query": "1.x@dev"
+        "atlas/query": "dev-refactory"
     },
     "autoload": {
         "psr-4": {
@@ -22,7 +22,7 @@
         }
     },
     "require-dev": {
-        "atlas/testing": "1.x@dev",
+        "atlas/testing": "dev-refactory",
         "pds/skeleton": "~1.0",
         "phpunit/phpunit": "~7.0"
     },

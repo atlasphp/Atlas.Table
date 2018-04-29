@@ -10,14 +10,13 @@ declare(strict_types=1);
 
 namespace Atlas\Table;
 
-use Atlas\Pdo\Connection;
 use Atlas\Query\QueryFactory;
-use Atlas\Query\Select;
 
-class TableQueryFactory extends QueryFactory
+class TableQueryFactory
 {
-    public function newSelect(Connection $connection) : Select
+    public function newQueryFactory(string $tableClass) : QueryFactory
     {
-        return new TableSelect($connection, $this->newBind());
+        $selectClass = $tableClass . 'Select';
+        return new QueryFactory($selectClass);
     }
 }

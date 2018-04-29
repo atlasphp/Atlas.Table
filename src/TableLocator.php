@@ -67,7 +67,7 @@ class TableLocator
     {
         return new $class(
             $this->connectionLocator,
-            $this->tableQueryFactory,
+            $this->tableQueryFactory->newQueryFactory($class),
             ($this->factory)($class . 'Events')
         );
     }

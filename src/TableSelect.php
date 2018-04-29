@@ -14,7 +14,7 @@ use Atlas\Pdo\Connection;
 use Atlas\Query\Bind;
 use Atlas\Query\Select;
 
-class TableSelect extends Select
+abstract class TableSelect extends Select
 {
     protected $table;
 
