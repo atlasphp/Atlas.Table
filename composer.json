@@ -14,7 +14,7 @@
     "require": {
         "php": ">=7.1.0",
         "atlas/pdo": "1.x@dev",
-        "atlas/query": "dev-refactory"
+        "atlas/query": "1.x@dev"
     },
     "autoload": {
         "psr-4": {
