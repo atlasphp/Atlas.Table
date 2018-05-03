@@ -4,7 +4,7 @@ namespace Atlas\Table;
 use Atlas\Table\Container;
 use Atlas\Testing\DataSource\Employee\EmployeeRow;
 use Atlas\Testing\DataSource\Employee\EmployeeTable;
-use Atlas\Testing\DataSource\SqliteFixture;
+use Atlas\Testing\DataSourceFixture;
 
 class TableSelectTest extends \PHPUnit\Framework\TestCase
 {
@@ -14,7 +14,7 @@ class TableSelectTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $connection = (new SqliteFixture())->exec();
+        $connection = (new DataSourceFixture())->exec();
         $this->table = TableLocator::new($connection)->get(EmployeeTable::CLASS);
         $this->select = $this->table->select();
     }

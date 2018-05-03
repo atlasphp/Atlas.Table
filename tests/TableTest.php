@@ -5,10 +5,10 @@ use Atlas\Table\Exception;
 use Atlas\Testing\Assertions;
 use Atlas\Testing\CompositeDataSource\Course\CourseRow;
 use Atlas\Testing\CompositeDataSource\Course\CourseTable;
-use Atlas\Testing\CompositeDataSource\SqliteFixture as CompositeFixture;
+use Atlas\Testing\CompositeDataSourceFixture;
 use Atlas\Testing\DataSource\Employee\EmployeeRow;
 use Atlas\Testing\DataSource\Employee\EmployeeTable;
-use Atlas\Testing\DataSource\SqliteFixture;
+use Atlas\Testing\DataSourceFixture;
 use PDO;
 use PDOStatement;
 
@@ -22,8 +22,8 @@ class TableTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $connection = (new SqliteFixture())->exec();
-        (new CompositeFixture($connection))->exec();
+        $connection = (new DataSourceFixture())->exec();
+        (new CompositeDataSourceFixture($connection))->exec();
 
         $this->tableLocator = TableLocator::new($connection);
         $this->table = $this->tableLocator->get(EmployeeTable::CLASS);
