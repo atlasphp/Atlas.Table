@@ -14,7 +14,7 @@ use Atlas\Table\TableLocator;
 $tableLocator = TableLocator::new('sqlite::memory:'')
 ```
 
-> ** Tip: **
+> **Tip:**
 >
 > Alternatively, you can pass an already-created Atlas.Pdo _Connection_ object.
 
@@ -76,7 +76,7 @@ $threadRows = $threadTable
     ->fetchRows();
 ```
 
-> ** Tip: **
+> **Tip:**
 >
 > The `select()` method gives you access to all the underlying SQL query
 > methods. See [Atlas\Query](https://github.com/atlasphp/Atlas.Query/)
@@ -135,10 +135,10 @@ $threadTable->update($threadRow);
 
 > **Warning:**
 >
-> The update() method will not catch exceptions; you may wish to wrap the
+> The updateRow() method will not catch exceptions; you may wish to wrap the
 > method call in a try/catch block.
 
-> ** Note: **
+> **Note:**
 >
 > The updateRow() method will only send the row data **changes** back to the
 > database, not the entire row. If there were no changes to the row data,
@@ -156,5 +156,5 @@ $threadTable->delete($threadRow);
 
 > **Warning:**
 >
-> The delete() method will not catch exceptions; you may wish to wrap the
+> The deleteRow() method will not catch exceptions; you may wish to wrap the
 > method call in a try/catch block.
