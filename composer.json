@@ -13,8 +13,8 @@
     ],
     "require": {
         "php": ">=7.1.0",
-        "atlas/pdo": "1.x@dev",
-        "atlas/query": "1.x@dev"
+        "atlas/pdo": "1.x@beta",
+        "atlas/query": "1.x@beta"
     },
     "autoload": {
         "psr-4": {
@@ -22,7 +22,7 @@
         }
     },
     "require-dev": {
-        "atlas/testing": "1.x@dev",
+        "atlas/testing": "1.x@beta",
         "pds/skeleton": "~1.0",
         "phpunit/phpunit": "~7.0"
     },
@@ -33,6 +33,5 @@
     },
     "suggest": {
         "atlas/cli": "A command-line tool to build skeleton classes."
-    },
-    "minimum-stability": "dev"
+    }
 }
