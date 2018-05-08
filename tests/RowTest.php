@@ -115,4 +115,27 @@ class RowTest extends \PHPUnit\Framework\TestCase
         $this->expectException(Exception::CLASS);
         $row->init('NO_SUCH_STATUS');
     }
+
+    public function testGetArray()
+    {
+        $init = [
+            'id' => 1,
+            'name' => 'foo',
+            'building' => 'bar',
+            'floor' => 2,
+        ];
+
+        $row = new EmployeeRow($init);
+        $row->init($row::SELECTED);
+
+        $row->name = 'baz';
+        $this->assertSame($init, $row->getArrayInit());
+
+        $copy = $init;
+        $copy['name'] = 'baz';
+        $this->assertSame($copy, $row->getArrayCopy());
+
+        $diff = ['name' => 'baz'];
+        $this->assertSame($diff, $row->getArrayDiff());
+    }
 }

@@ -109,6 +109,11 @@ abstract class Row implements JsonSerializable
         return $diff;
     }
 
+    public function getArrayInit() : array
+    {
+        return $this->init;
+    }
+
     public function jsonSerialize() : array
     {
         return $this->getArrayCopy();
