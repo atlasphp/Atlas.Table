@@ -55,12 +55,12 @@ abstract class TableSelect extends Select
         return $rows;
     }
 
-    public function fetchCount(string $col = '*') : int
+    public function fetchCount(string $column = '*') : int
     {
         $select = clone $this;
         $select->resetColumns()
             ->resetLimit()
-            ->columns("COUNT({$col})");
+            ->columns("COUNT({$column})");
 
         return (int) $this->table->getReadConnection()->fetchValue(
             $select->getStatement(),

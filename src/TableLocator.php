@@ -45,30 +45,30 @@ class TableLocator
         }
     }
 
-    public function has(string $class) : bool
+    public function has(string $tableClass) : bool
     {
-        return class_exists($class) && is_subclass_of($class, Table::CLASS);
+        return class_exists($tableClass) && is_subclass_of($tableClass, Table::CLASS);
     }
 
-    public function get(string $class) : Table
+    public function get(string $tableClass) : Table
     {
-        if (! $this->has($class)) {
-            throw Exception::tableNotFound($class);
+        if (! $this->has($tableClass)) {
+            throw Exception::tableNotFound($tableClass);
         }
 
-        if (! isset($this->instances[$class])) {
-            $this->instances[$class] = $this->newTable($class);
+        if (! isset($this->instances[$tableClass])) {
+            $this->instances[$tableClass] = $this->newTable($tableClass);
         }
 
-        return $this->instances[$class];
+        return $this->instances[$tableClass];
     }
 
-    protected function newTable($class) : Table
+    protected function newTable(string $tableClass) : Table
     {
-        return new $class(
+        return new $tableClass(
             $this->connectionLocator,
-            $this->tableQueryFactory->newQueryFactory($class),
-            ($this->factory)($class . 'Events')
+            $this->tableQueryFactory->newQueryFactory($tableClass),
+            ($this->factory)($tableClass . 'Events')
         );
     }
 }
