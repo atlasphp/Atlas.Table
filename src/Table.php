@@ -101,6 +101,7 @@ abstract class Table
     {
         $insert = $this->queryFactory->newInsert($this->getWriteConnection());
         $insert->into(static::NAME);
+        $this->tableEvents->modifyInsert($this, $insert);
         return $insert;
     }
 
@@ -112,7 +113,7 @@ abstract class Table
 
     public function insertRowPrepare(Row $row) : Insert
     {
-        $this->tableEvents->beforeInsert($this, $row);
+        $this->tableEvents->beforeInsertRow($this, $row);
 
         $insert = $this->insert();
         $cols = $row->getArrayCopy();
@@ -121,7 +122,7 @@ abstract class Table
         }
         $insert->columns($cols);
 
-        $this->tableEvents->modifyInsert($this, $row, $insert);
+        $this->tableEvents->modifyInsertRow($this, $row, $insert);
         return $insert;
     }
 
@@ -139,7 +140,7 @@ abstract class Table
             $row->$autoinc = $insert->getLastInsertId(static::AUTOINC_SEQUENCE);
         }
 
-        $this->tableEvents->afterInsert($this, $row, $insert, $pdoStatement);
+        $this->tableEvents->afterInsertRow($this, $row, $insert, $pdoStatement);
 
         $row->init($row::INSERTED);
         return $pdoStatement;
@@ -149,6 +150,7 @@ abstract class Table
     {
         $update = $this->queryFactory->newUpdate($this->getWriteConnection());
         $update->table(static::NAME);
+        $this->tableEvents->modifyUpdate($this, $update);
         return $update;
     }
 
@@ -160,7 +162,7 @@ abstract class Table
 
     public function updateRowPrepare(Row $row) : Update
     {
-        $this->tableEvents->beforeUpdate($this, $row);
+        $this->tableEvents->beforeUpdateRow($this, $row);
 
         $update = $this->update();
         $diff = $row->getArrayDiff();
@@ -174,7 +176,7 @@ abstract class Table
         }
         $update->columns($diff);
 
-        $this->tableEvents->modifyUpdate($this, $row, $update);
+        $this->tableEvents->modifyUpdateRow($this, $row, $update);
         return $update;
     }
 
@@ -191,7 +193,7 @@ abstract class Table
             throw Exception::unexpectedRowCountAffected($rowCount);
         }
 
-        $this->tableEvents->afterUpdate($this, $row, $update, $pdoStatement);
+        $this->tableEvents->afterUpdateRow($this, $row, $update, $pdoStatement);
 
         $row->init($row::UPDATED);
         return $pdoStatement;
@@ -201,6 +203,7 @@ abstract class Table
     {
         $delete = $this->queryFactory->newDelete($this->getWriteConnection());
         $delete->from(static::NAME);
+        $this->tableEvents->modifyDelete($this, $delete);
         return $delete;
     }
 
@@ -212,14 +215,14 @@ abstract class Table
 
     public function deleteRowPrepare(Row $row) : Delete
     {
-        $this->tableEvents->beforeDelete($this, $row);
+        $this->tableEvents->beforeDeleteRow($this, $row);
 
         $delete = $this->delete();
         foreach (static::PRIMARY_KEY as $primaryCol) {
             $delete->where("{$primaryCol} = ", $row->$primaryCol);
         }
 
-        $this->tableEvents->modifyDelete($this, $row, $delete);
+        $this->tableEvents->modifyDeleteRow($this, $row, $delete);
         return $delete;
     }
 
@@ -236,7 +239,7 @@ abstract class Table
             throw Exception::unexpectedRowCountAffected($rowCount);
         }
 
-        $this->tableEvents->afterDelete($this, $row, $delete, $pdoStatement);
+        $this->tableEvents->afterDeleteRow($this, $row, $delete, $pdoStatement);
         $row->init($row::DELETED);
         return $pdoStatement;
     }

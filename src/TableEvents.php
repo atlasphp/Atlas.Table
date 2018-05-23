@@ -26,15 +26,15 @@ abstract class TableEvents
     {
     }
 
-    public function beforeInsert(Table $table, Row $row) : void
+    public function beforeInsertRow(Table $table, Row $row) : void
     {
     }
 
-    public function modifyInsert(Table $table, Row $row, Insert $insert) : void
+    public function modifyInsertRow(Table $table, Row $row, Insert $insert) : void
     {
     }
 
-    public function afterInsert(
+    public function afterInsertRow(
         Table $table,
         Row $row,
         Insert $insert,
@@ -43,15 +43,15 @@ abstract class TableEvents
     {
     }
 
-    public function beforeUpdate(Table $table, Row $row) : void
+    public function beforeUpdateRow(Table $table, Row $row) : void
     {
     }
 
-    public function modifyUpdate(Table $table, Row $row, Update $update) : void
+    public function modifyUpdateRow(Table $table, Row $row, Update $update) : void
     {
     }
 
-    public function afterUpdate(
+    public function afterUpdateRow(
         Table $table,
         Row $row,
         Update $update,
@@ -60,20 +60,32 @@ abstract class TableEvents
     {
     }
 
-    public function beforeDelete(Table $table, Row $row) : void
+    public function beforeDeleteRow(Table $table, Row $row) : void
     {
     }
 
-    public function modifyDelete(Table $table, Row $row, Delete $delete) : void
+    public function modifyDeleteRow(Table $table, Row $row, Delete $delete) : void
     {
     }
 
-    public function afterDelete(
+    public function afterDeleteRow(
         Table $table,
         Row $row,
         Delete $delete,
         PDOStatement $pdoStatement
     ) : void
+    {
+    }
+
+    public function modifyInsert(Table $table, Insert $insert) : void
+    {
+    }
+
+    public function modifyUpdate(Table $table, Update $update) : void
+    {
+    }
+
+    public function modifyDelete(Table $table, Delete $delete) : void
     {
     }
 }
