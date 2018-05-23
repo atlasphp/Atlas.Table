@@ -92,32 +92,9 @@ abstract class Table
         $select = $this->queryFactory->newSelect($this->getReadConnection());
         $select->setTable($this);
         $select->from(static::NAME);
-        foreach ($whereEquals as $key => $val) {
-            $this->selectWhere($select, $key, $val);
-        }
-
+        $select->whereEquals($whereEquals);
         $this->tableEvents->modifySelect($this, $select);
         return $select;
-    }
-
-    protected function selectWhere(TableSelect $select, $key, $val) : void
-    {
-        if (is_numeric($key)) {
-            $select->where($val);
-            return;
-        }
-
-        if ($val === null) {
-            $select->where("{$key} IS NULL");
-            return;
-        }
-
-        if (is_array($val)) {
-            $select->where("{$key} IN ", $val);
-            return;
-        }
-
-        $select->where("{$key} = ", $val);
     }
 
     public function insert() : Insert

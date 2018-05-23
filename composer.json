@@ -13,8 +13,8 @@
     ],
     "require": {
         "php": ">=7.1.0",
-        "atlas/pdo": "1.x@beta",
-        "atlas/query": "1.x@beta"
+        "atlas/pdo": "~1.0",
+        "atlas/query": "~1.0"
     },
     "autoload": {
         "psr-4": {

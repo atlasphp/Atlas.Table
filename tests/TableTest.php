@@ -272,30 +272,6 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $this->table->deleteRow($row);
     }
 
-    public function testSelect_whereEquals()
-    {
-        $actual = $this->table->select([
-            'foo' => [1, 2, 3],
-            'bar' => null,
-            'baz' => 'baz_value',
-            'dib = NOW()',
-        ]);
-
-        $expect = '
-            SELECT
-
-            FROM
-                employee
-            WHERE
-                foo IN (:__1__, :__2__, :__3__)
-                AND bar IS NULL
-                AND baz = :__4__
-                AND dib = NOW()
-        ';
-
-        $this->assertSameSql($expect, $actual->getStatement());
-    }
-
     protected function silenceErrors()
     {
         $conn = $this->table->getWriteConnection();

@@ -88,7 +88,6 @@ Create a new Row using the `newRow()` method. You can assign data using
 properties, or pass an array of initial data to populate into the Row.
 
 ```php
-<?php
 $threadRow = $atlas->newRow([
     'title' => 'New Thread Title',
 ]);
@@ -97,7 +96,6 @@ $threadRow = $atlas->newRow([
 You can assign a value via a property, which maps to a column name.
 
 ```php
-<?php
 $date = new \DateTime();
 $threadRow->date_added = $date->format('Y-m-d H:i:s');
 ```
@@ -105,7 +103,6 @@ $threadRow->date_added = $date->format('Y-m-d H:i:s');
 You can insert a single Row into the database by using the `insertRow()` method:
 
 ```php
-<?php
 $threadTable->insertRow($threadRow);
 ```
 
@@ -122,7 +119,6 @@ modify the Row to set the last-inserted ID.
 Updating an existing row works the same as `insertRow()`.
 
 ```php
-<?php
 // fetch an existing row by primary key
 $threadRow = $threadTable->fetchRow(3);
 
@@ -130,7 +126,7 @@ $threadRow = $threadTable->fetchRow(3);
 $threadRow->title = 'This title is better than the last one';
 
 // save the row back to the database
-$threadTable->update($threadRow);
+$threadTable->updateRow($threadRow);
 ```
 
 > **Warning:**
@@ -149,12 +145,122 @@ $threadTable->update($threadRow);
 Deleting a row works the same as inserting or updating.
 
 ```php
-<?php
 $threadRow = $threadTable->fetchRow(3);
-$threadTable->delete($threadRow);
+$threadTable->deleteRow($threadRow);
 ```
 
 > **Warning:**
 >
 > The deleteRow() method will not catch exceptions; you may wish to wrap the
 > method call in a try/catch block.
+
+
+## Table-Wide Operations
+
+Whereas `insertRow()`, `updateRow()`, and `deleteRow()` operate on individual
+Row objects, you can perform table-wide operations using `insert()`, `update()`,
+and `delete()`. These latter three methods return Atlas.Query objects for you
+to work with as you see fit; call `perform()` on them directly to execute the
+query and get back a _PDOStatement_.
+
+See the [Atlas.Query](/cassini/query/) documentation for more information on
+the insert, update, and delete query objects.
+
+
+## Table Events
+
+There are several events that run at different points in the query object
+creation and execution lifecycle:
+
+```php
+// runs after any Select query is created
+function modifySelect(Table $table, TableSelect $select)
+
+// runs after a newly-selected Row is populated
+function modifySelectedRow(Table $table, Row $row)
+
+// runs after any Insert query is created
+function modifyInsert(Table $table, Insert $insert)
+
+// runs after any Update query is created
+function modifyUpdate(Table $table, Update $update)
+
+// runs after any Delete query is created
+function modifyDelete(Table $table, Delete $delete)
+
+// runs before a Row-specific Insert query is created
+function beforeInsertRow(Table $table, Row $row)
+
+// runs after the Row-specific Insert query is created, but before it is performed
+function modifyInsertRow(Table $table, Row $row, Insert $insert)
+
+// runs after the Row-specific Insert query is performed
+function afterInsertRow(
+    Table $table,
+    Row $row,
+    Insert $insert,
+    PDOStatement $pdoStatement
+)
+
+// runs before the Row-specific Update query is created
+function beforeUpdateRow(Table $table, Row $row)
+
+// runs after the Row-specific Update query is created, but before it is performed
+function modifyUpdateRow(Table $table, Row $row, Update $update)
+
+// runs after the Row-specific Update query is performed
+function afterUpdateRow(
+    Table $table,
+    Row $row,
+    Update $update,
+    PDOStatement $pdoStatement
+)
+
+// runs before the Row-specific Delete query is created
+function beforeDeleteRow(Table $table, Row $row)
+
+// runs after the Row-specific Delete query is created, but before it is performed
+function modifyDeleteRow(Table $table, Row $row, Delete $delete)
+
+// runs after the Row-specific Delete query is performed
+function afterDeleteRow(
+    Table $table,
+    Row $row,
+    Delete $delete,
+    PDOStatement $pdoStatement
+)
+```
+
+For example, when you call `updateRow()`, these events run in this order:
+
+- `beforeUpdateRow()`
+- `modifyUpdate()`
+- `modifyUpdateRow()`
+- `afterUpdateRow()`
+
+Note that merely calling `update()` to get a table-wide Update query will only
+run the `modifyUpdate()` method, as it is not a row-specific interaction.
+
+TableEvents are be the place to put behaviors such as setting `inserted_at` or
+`updated_at` values, etc:
+
+```php
+namespace Blog\DataSource\Posts;
+
+use Atlas\Table\Row;
+use Atlas\Table\Table;
+use Atlas\Table\TableEvents;
+
+class PostsTableEvents extends TableEvents
+{
+    public function beforeInsertRow(Table $table, Row $row)
+    {
+        $row->inserted_at = date('Y-m-d H:i:s');
+    }
+
+    public function beforeUpdateRow(Table $table, Row $row)
+    {
+        $row->updated_at = date('Y-m-d H:i:s');
+    }
+}
+```
