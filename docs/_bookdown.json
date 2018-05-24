@@ -1,6 +1,9 @@
 {
     "title": "Table Data Gateway",
     "content": [
-        "usage.md"
+        "instantiation.md",
+        "reading.md",
+        "writing.md",
+        "events.md"
     ]
 }
