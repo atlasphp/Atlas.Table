@@ -63,7 +63,7 @@ function afterDeleteRow(
 )
 ```
 
-For example, when you call `updateRow()`, these events run in this order:
+For example, when you call `Table::updateRow()`, these events run in this order:
 
 - `beforeUpdateRow()`
 - `modifyUpdate()`
@@ -73,7 +73,7 @@ For example, when you call `updateRow()`, these events run in this order:
 Note that merely calling `update()` to get a table-wide Update query will only
 run the `modifyUpdate()` method, as it is not a row-specific interaction.
 
-TableEvents are be the place to put behaviors such as setting `inserted_at` or
+_TableEvents_ are be the place to put behaviors such as setting `inserted_at` or
 `updated_at` values, etc:
 
 ```php
