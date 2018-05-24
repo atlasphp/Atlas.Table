@@ -1,8 +1,8 @@
 # Events
 
 Each generated _Table_ class has its own corresponding _TableEvents_ class. The
-TableEvents methods are invoked automatically at different points in the _Table_
-interactions:
+_TableEvents_ methods are invoked automatically at different points in the
+_Table_ interactions:
 
 ```php
 // runs after any Select query is created
