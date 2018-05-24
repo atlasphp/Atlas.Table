@@ -1,4 +1,4 @@
-# Events
+# Table Events
 
 Each generated _Table_ class has its own corresponding _TableEvents_ class. The
 _TableEvents_ methods are invoked automatically at different points in the
