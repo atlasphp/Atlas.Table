@@ -29,8 +29,8 @@ $threadTable->insertRow($threadRow);
 > The insertRow() method will not catch exceptions; you may wish to wrap the
 > method call in a try/catch block.
 
-Inserting a Row with an auto-incrementing primary key will automatically
-modify the Row to set the last-inserted ID.
+Inserting a Row into a table with an auto-incrementing primary key will
+automatically modify the Row to set the last-inserted ID.
 
 ## Updating an Existing Row
 
