@@ -1,4 +1,4 @@
-# Reading Rows
+# Reading From The Table
 
 ## Fetching A Single Row
 
