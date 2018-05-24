@@ -14,7 +14,7 @@ There are new modify(Insert|Update|Delete) TableEvents methods that now apply
 to insert(), update(), and delete() respectively. These allow you a chance to
 modify the table-wide operation before working with the query object directly.
 
-This release also adds a PHPStorm metadata resource.
+This release also adds a PHPStorm metadata resource, and updates the docs.
 
 ## 1.0.0-beta1
 
