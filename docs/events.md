@@ -1,7 +1,8 @@
 # Events
 
-There are several table-level events that run at different points in the query
-object creation and execution lifecycle:
+Each generated _Table_ class has its own corresponding _TableEvents_ class. The
+TableEvents methods are invoked automatically at different points in the _Table_
+interactions:
 
 ```php
 // runs after any Select query is created
