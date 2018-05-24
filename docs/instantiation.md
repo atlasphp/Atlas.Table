@@ -1,7 +1,7 @@
 # Instantiation
 
 Before using Atlas.Table, you will need to create the prerequsite data-source
-classes using [Atlas.Cli 2.x](https://github.com/atlasphp/Atlas.Cli).
+classes using the [skeleton generator](/cassini/skeleton).
 
 Once you have your data source classes in place, create a _TableLocator_ using
 the static `new()` method and pass your PDO connection parameters:
