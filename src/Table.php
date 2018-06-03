@@ -75,16 +75,12 @@ abstract class Table
 
     public function fetchRow($primaryVal) : ?Row
     {
-        $select = $this->select();
-        $this->primaryKey->whereRow($select, $primaryVal);
-        return $select->fetchRow();
+        return $this->selectRow($this->select(), $primaryVal);
     }
 
     public function fetchRows(array $primaryVals) : array
     {
-        $select = $this->select();
-        $this->primaryKey->whereRows($select, $primaryVals);
-        return $select->fetchRows();
+        return $this->selectRows($this->select(), $primaryVals);
     }
 
     public function select(array $whereEquals = []) : TableSelect
@@ -95,6 +91,18 @@ abstract class Table
         $select->whereEquals($whereEquals);
         $this->tableEvents->modifySelect($this, $select);
         return $select;
+    }
+
+    public function selectRow(TableSelect $select, $primaryVal) : ?Row
+    {
+        $this->primaryKey->whereRow($select, $primaryVal);
+        return $select->fetchRow();
+    }
+
+    public function selectRows(TableSelect $select, array $primaryVals) : array
+    {
+        $this->primaryKey->whereRows($select, $primaryVals);
+        return $select->fetchRows();
     }
 
     public function insert() : Insert
