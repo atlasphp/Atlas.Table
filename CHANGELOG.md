@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## 1.0.0-beta4
+
+TableEvent::beforeInsertRow() now returns `?array` instead of `void`. The
+returned array will be used for the insert values; this allows consumers to
+explicitly control which values will be inserted, and to validate the values
+early on. (If a null is returned, the insert will use `$row->getArrayCopy()`.)
+
+Likewise, TableEvent::beforeUpdateRow() now returns `?array` instead of `void`.
+The returned array will be used for the update values; this allows consumers to
+explicitly control which values will be updated, and to validate the values
+early on. (If a null is returned, the update will use `$row->getArrayDiff()`.)
+
+These are both BC breaks for implementors of TableEvents::beforeInsertRow() and
+beforeUpdateRow().
+
 ## 1.0.0-beta3
 
 Added methods Table::selectRow() and selectRows() so you can pass in an
