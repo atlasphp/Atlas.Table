@@ -121,14 +121,17 @@ abstract class Table
 
     public function insertRowPrepare(Row $row) : Insert
     {
-        $this->tableEvents->beforeInsertRow($this, $row);
+        $copy = $this->tableEvents->beforeInsertRow($this, $row);
+        if ($copy === null) {
+            $copy = $row->getArrayCopy();
+        }
 
         $insert = $this->insert();
-        $cols = $row->getArrayCopy();
-        if (static::AUTOINC_COLUMN !== null) {
-            unset($cols[static::AUTOINC_COLUMN]);
+        $autoinc = static::AUTOINC_COLUMN;
+        if ($autoinc !== null && ! isset($copy[$autoinc])) {
+            unset($copy[$autoinc]);
         }
-        $insert->columns($cols);
+        $insert->columns($copy);
 
         $this->tableEvents->modifyInsertRow($this, $row, $insert);
         return $insert;
@@ -170,10 +173,12 @@ abstract class Table
 
     public function updateRowPrepare(Row $row) : Update
     {
-        $this->tableEvents->beforeUpdateRow($this, $row);
+        $diff = $this->tableEvents->beforeUpdateRow($this, $row);
+        if ($diff === null) {
+            $diff = $row->getArrayDiff();
+        }
 
         $update = $this->update();
-        $diff = $row->getArrayDiff();
         foreach (static::PRIMARY_KEY as $primaryCol) {
             if (array_key_exists($primaryCol, $diff)) {
                 $message = "Primary key value for '$primaryCol' changed";

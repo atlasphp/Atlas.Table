@@ -26,8 +26,9 @@ abstract class TableEvents
     {
     }
 
-    public function beforeInsertRow(Table $table, Row $row) : void
+    public function beforeInsertRow(Table $table, Row $row) : ?array
     {
+        return null;
     }
 
     public function modifyInsertRow(Table $table, Row $row, Insert $insert) : void
@@ -43,8 +44,9 @@ abstract class TableEvents
     {
     }
 
-    public function beforeUpdateRow(Table $table, Row $row) : void
+    public function beforeUpdateRow(Table $table, Row $row) : ?array
     {
+        return null;
     }
 
     public function modifyUpdateRow(Table $table, Row $row, Update $update) : void
