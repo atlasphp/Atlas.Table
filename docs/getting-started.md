@@ -25,7 +25,7 @@ the static `new()` method and pass your PDO connection parameters:
 ```php
 use Atlas\Table\TableLocator;
 
-$tableLocator = TableLocator::new('sqlite::memory:'')
+$tableLocator = TableLocator::new('sqlite::memory:')
 ```
 
 > **Tip:**
