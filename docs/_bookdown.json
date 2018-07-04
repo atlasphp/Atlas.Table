@@ -1,7 +1,7 @@
 {
     "title": "Table Data Gateway",
     "content": [
-        "instantiation.md",
+        "getting-started.md",
         "reading.md",
         "writing.md",
         "events.md"

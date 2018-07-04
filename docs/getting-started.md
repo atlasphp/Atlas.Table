@@ -1,3 +1,19 @@
+# Getting Started
+
+## Installation
+
+This package is installable and autoloadable via [Composer](https://getcomposer.org/)
+as [atlas/table](https://packagist.org/packages/atlas/table). Add the following lines
+to your `composer.json` file, then call `composer update`.
+
+```json
+{
+    "require": {
+        "atlas/table": "~1.0"
+    }
+}
+```
+
 # Instantiation
 
 Before using Atlas.Table, you will need to create the prerequsite data-source
