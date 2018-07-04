@@ -14,7 +14,7 @@ to your `composer.json` file, then call `composer update`.
 }
 ```
 
-# Instantiation
+## Instantiation
 
 Before using Atlas.Table, you will need to create the prerequsite data-source
 classes using the [skeleton generator](/cassini/skeleton).
