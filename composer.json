@@ -2,7 +2,7 @@
     "name": "atlas/table",
     "type": "library",
     "description": "Table data gateway implementation for Atlas.",
-    "keywords": [ "sql", "data", "mapper", "mapping", "orm" ],
+    "keywords": [ "sql", "table", "data", "gateway", "mapper", "mapping", "orm" ],
     "homepage": "http://github.com/atlasphp/Atlas.Table",
     "license": "MIT",
     "authors": [
@@ -22,7 +22,7 @@
         }
     },
     "require-dev": {
-        "atlas/testing": "1.x@beta",
+        "atlas/testing": "~1.0",
         "pds/skeleton": "~1.0",
         "phpunit/phpunit": "~7.0"
     },
