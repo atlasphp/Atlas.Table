@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.0.0
+
+First stable release.
+
 ## 1.0.0-beta4
 
 TableEvent::beforeInsertRow() now returns `?array` instead of `void`. The
