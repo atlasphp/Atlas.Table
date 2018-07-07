@@ -25,7 +25,7 @@ the static `new()` method and pass your PDO connection parameters:
 ```php
 use Atlas\Table\TableLocator;
 
-$tableLocator = TableLocator::new('sqlite::memory:')
+$tableLocator = TableLocator::new('sqlite::memory:');
 ```
 
 > **Tip:**
@@ -37,7 +37,7 @@ You can then use the locator to retrieve a _Table_ by its class name.
 ```php
 use Atlas\Testing\DataSource\Thread\ThreadTable;
 
-$threadTable = $tableLocator->get(ThreadTable::CLASS)
+$threadTable = $tableLocator->get(ThreadTable::CLASS);
 ```
 
 From there you can select, insert, update, and delete _Row_ objects on a table,
