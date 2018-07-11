@@ -33,12 +33,12 @@ function bench($label, $callable)
 
 $connection = (new DataSourceFixture())->exec();
 $tableLocator = TableLocator::new($connection);
-$employeeTable = $tableLocator->get(ThreadTable::CLASS);
+$threadTable = $tableLocator->get(ThreadTable::CLASS);
 
 bench('new ThreadRow()', function () {
     new ThreadRow();
 });
 
-bench('ThreadTable::newRow()', function () use ($employeeTable) {
-    $employeeTable->newRow();
+bench('ThreadTable::newRow()', function () use ($threadTable) {
+    $threadTable->newRow();
 });
