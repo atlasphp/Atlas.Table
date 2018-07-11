@@ -17,8 +17,8 @@ if (! file_exists($file)) {
 
 use Atlas\Table\TableLocator;
 use Atlas\Testing\DataSourceFixture;
-use Atlas\Testing\DataSource\Employee\EmployeeTable;
-use Atlas\Testing\DataSource\Employee\EmployeeRow;
+use Atlas\Testing\DataSource\Thread\ThreadTable;
+use Atlas\Testing\DataSource\Thread\ThreadRow;
 
 function bench($label, $callable)
 {
@@ -33,12 +33,12 @@ function bench($label, $callable)
 
 $connection = (new DataSourceFixture())->exec();
 $tableLocator = TableLocator::new($connection);
-$employeeTable = $tableLocator->get(EmployeeTable::CLASS);
+$employeeTable = $tableLocator->get(ThreadTable::CLASS);
 
-bench('new EmployeeRow()', function () {
-    new EmployeeRow();
+bench('new ThreadRow()', function () {
+    new ThreadRow();
 });
 
-bench('EmployeeTable::newRow()', function () use ($employeeTable) {
+bench('ThreadTable::newRow()', function () use ($employeeTable) {
     $employeeTable->newRow();
 });
