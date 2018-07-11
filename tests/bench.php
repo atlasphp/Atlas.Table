@@ -1,5 +1,19 @@
 <?php
-require dirname(__DIR__) . '/vendor/autoload.php';
+$dir = __DIR__;
+while ($dir !== '') {
+    $dir = dirname($dir);
+    $file = "{$dir}/vendor/autoload.php";
+    if (file_exists($file)) {
+        require $file;
+        echo "Autoloader at $file" . PHP_EOL;
+        break;
+    }
+}
+
+if (! file_exists($file)) {
+    "No autoloader found." . PHP_EOL;
+    exit(1);
+}
 
 use Atlas\Table\TableLocator;
 use Atlas\Testing\DataSourceFixture;
