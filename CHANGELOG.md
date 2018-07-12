@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.0.1
+
+This release incorporates some documentation fixes and an added benchmarking
+script at `tests/bench.php`.
+
 ## 1.0.0
 
 First stable release.
