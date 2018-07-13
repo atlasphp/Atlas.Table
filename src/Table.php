@@ -259,13 +259,6 @@ abstract class Table
 
     public function newRow(array $cols = []) : Row
     {
-        $colNames = static::COLUMN_NAMES;
-        foreach ($cols as $col => $val) {
-            if (! in_array($col, $colNames)) {
-                unset($cols[$col]);
-            }
-        }
-
         $rowClass = $this->rowClass;
         return new $rowClass($cols);
     }

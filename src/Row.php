@@ -42,6 +42,10 @@ abstract class Row implements JsonSerializable
     {
         $this->init = $this->cols;
         foreach ($cols as $col => $val) {
+            if (! array_key_exists($col, $this->cols)) {
+                continue;
+            }
+            $this->assertValidValue($val);
             $this->init[$col] = $val;
             $this->cols[$col] = $val;
         }
