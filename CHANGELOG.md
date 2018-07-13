@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.0.2
+
+Moves the check to see if a column exists from `Table::newRow()` to `Row::__construct()`.
+
+`Row::__construct()` now calls `Row::assertValidValue()` on column value inputs.
+
 ## 1.0.1
 
 This release incorporates some documentation fixes and an added benchmarking
