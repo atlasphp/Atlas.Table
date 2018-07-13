@@ -36,9 +36,19 @@ $tableLocator = TableLocator::new($connection);
 $threadTable = $tableLocator->get(ThreadTable::CLASS);
 
 bench('new ThreadRow()', function () {
-    new ThreadRow();
+    new ThreadRow([
+        'thread_id' => null,
+        'author_id' => null,
+        'subject' => null,
+        'body' => null,
+    ]);
 });
 
 bench('ThreadTable::newRow()', function () use ($threadTable) {
-    $threadTable->newRow();
+    $threadTable->newRow([
+        'thread_id' => null,
+        'author_id' => null,
+        'subject' => null,
+        'body' => null,
+    ]);
 });
