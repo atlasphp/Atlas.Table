@@ -63,6 +63,11 @@ class TableLocator
         return $this->instances[$tableClass];
     }
 
+    public function getConnectionLocator() : ConnectionLocator
+    {
+        return $this->connectionLocator;
+    }
+
     protected function newTable(string $tableClass) : Table
     {
         return new $tableClass(

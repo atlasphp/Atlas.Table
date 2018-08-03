@@ -35,4 +35,12 @@ class TableLocatorTest extends \PHPUnit\Framework\TestCase
         );
         $this->tableLocator->get('Foo');
     }
+
+    public function testGetConnectionLocator()
+    {
+        $this->assertInstanceOf(
+            ConnectionLocator::CLASS,
+            $this->tableLocator->getConnectionLocator()
+        );
+    }
 }
