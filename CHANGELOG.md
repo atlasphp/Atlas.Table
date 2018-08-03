@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.1.0
+
+Added method `TableLocator::getConnectionLocator()`.
+
 ## 1.0.2
 
 Moves the check to see if a column exists from `Table::newRow()` to `Row::__construct()`.
