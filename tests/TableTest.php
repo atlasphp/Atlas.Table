@@ -252,8 +252,25 @@ class TableTest extends \PHPUnit\Framework\TestCase
         ]);
 
         // does the insert *look* successful?
+        $this->logQueries();
         $actual = $this->table->insertRow($row);
         $this->assertInstanceOf(PDOStatement::CLASS, $actual);
+
+        // check quoting
+        $queries = $this->getQueries();
+        $actual = $queries[0]['statement'];
+        $expect = '
+            INSERT INTO "employee" (
+                "name",
+                "building",
+                "floor"
+            ) VALUES (
+                :name,
+                :building,
+                :floor
+            )
+        ';
+        $this->assertSameSql($expect, $actual);
 
         // did the autoincrement ID get retained?
         $this->assertEquals(13, $row->id);
@@ -286,8 +303,21 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $row->name = 'Annabelle';
 
         // did the update *look* successful?
+        $this->logQueries();
         $actual = $this->table->updateRow($row);
         $this->assertInstanceOf(PDOStatement::CLASS, $actual);
+
+        // check quoting
+        $queries = $this->getQueries();
+        $actual = $queries[0]['statement'];
+        $expect = '
+            UPDATE "employee"
+            SET
+                "name" = :name
+            WHERE
+                id = :__1__
+        ';
+        $this->assertSameSql($expect, $actual);
 
         // was it *actually* updated?
         $expect = $row->getArrayCopy();
@@ -314,10 +344,23 @@ class TableTest extends \PHPUnit\Framework\TestCase
 
     public function testDeleteRow()
     {
-        // fetch a record, then delete it
+        // fetch a record
         $row = $this->table->fetchRow(1);
+
+        // now delete it
+        $this->logQueries();
         $actual = $this->table->deleteRow($row);
         $this->assertInstanceOf(PDOStatement::CLASS, $actual);
+
+        // check quoting
+        $queries = $this->getQueries();
+        $actual = $queries[0]['statement'];
+        $expect = '
+            DELETE FROM "employee"
+            WHERE
+                id = :__1__
+        ';
+        $this->assertSameSql($expect, $actual);
 
         // did it delete?
         $actual = $this->table->fetchRow(1);
