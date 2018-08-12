@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.2.0
+
+This release adds automatic identifier quoting for the FROM/INTO table name (via
+`Table::select()`, `insert()`, `update()`, and `delete()`) as well as automatic
+identifier quoting for primary key column names (via `Table::fetchRow()` and
+`fetchRows()`).
+
+Updated docs and tests accordingly.
+
 ## 1.1.0
 
 Added method `TableLocator::getConnectionLocator()`.
