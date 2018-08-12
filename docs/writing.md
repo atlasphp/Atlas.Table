@@ -83,3 +83,14 @@ query and get back a _PDOStatement_.
 
 See the [Atlas.Query](/cassini/query/) documentation for more information on
 the insert, update, and delete query objects.
+
+## Identifier Quoting
+
+The `insert()`, `update()`, and `delete()` methods will automatically quote the
+table name in the INTO and FROM clauses.
+
+In addition, the _Insert_ and _Update_ query objects themselves will
+automatically quote the column names being inserted or updated.
+
+You can manually quote any other identifiers using the query object's
+`quoteIdentifier()` method.

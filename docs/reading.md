@@ -46,3 +46,14 @@ $threadRows = $threadTable
 The `Table::select()` method returns a query object that you access to all the
 underlying SQL query methods. See the [query system](/cassini/query)
 documentation for more information.
+
+## Identifier Quoting
+
+The `select()` method will automatically quote the table name in the FROM
+clause.
+
+In addition, the `fetchRow()` and `fetchRows()` methods will automatically quote
+the primary key column names in the WHERE clause.
+
+You can manually quote any other identifiers using the _Select_ object's
+`quoteIdentifier()` method.
