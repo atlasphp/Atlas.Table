@@ -87,7 +87,7 @@ abstract class Table
     {
         $select = $this->queryFactory->newSelect($this->getReadConnection());
         $select->setTable($this);
-        $select->from(static::NAME);
+        $select->from($select->quoteIdentifier(static::NAME));
         $select->whereEquals($whereEquals);
         $this->tableEvents->modifySelect($this, $select);
         return $select;
@@ -108,7 +108,7 @@ abstract class Table
     public function insert() : Insert
     {
         $insert = $this->queryFactory->newInsert($this->getWriteConnection());
-        $insert->into(static::NAME);
+        $insert->into($insert->quoteIdentifier(static::NAME));
         $this->tableEvents->modifyInsert($this, $insert);
         return $insert;
     }
@@ -160,7 +160,7 @@ abstract class Table
     public function update() : Update
     {
         $update = $this->queryFactory->newUpdate($this->getWriteConnection());
-        $update->table(static::NAME);
+        $update->table($update->quoteIdentifier(static::NAME));
         $this->tableEvents->modifyUpdate($this, $update);
         return $update;
     }
@@ -215,7 +215,7 @@ abstract class Table
     public function delete() : Delete
     {
         $delete = $this->queryFactory->newDelete($this->getWriteConnection());
-        $delete->from(static::NAME);
+        $delete->from($delete->quoteIdentifier(static::NAME));
         $this->tableEvents->modifyDelete($this, $delete);
         return $delete;
     }

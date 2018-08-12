@@ -24,7 +24,8 @@ class PrimaryComposite
         $condition = [];
         foreach ($this->cols as $col) {
             $this->assertCompositePart($primaryVal, $col);
-            $condition[] = "{$col} = " . $select->bindInline($primaryVal[$col]);
+            $qcol = $select->quoteIdentifier($col);
+            $condition[] = "{$qcol} = " . $select->bindInline($primaryVal[$col]);
         }
         $select->where(implode(' AND ', $condition));
     }
@@ -35,7 +36,8 @@ class PrimaryComposite
             $condition = [];
             foreach ($this->cols as $col) {
                 $this->assertCompositePart($primaryVal, $col);
-                $condition[] = "{$col} = " . $select->bindInline($primaryVal[$col]);
+                $qcol = $select->quoteIdentifier($col);
+                $condition[] = "{$qcol} = " . $select->bindInline($primaryVal[$col]);
             }
             $select->orWhere('(' . implode(' AND ', $condition) . ')');
         }

@@ -21,11 +21,13 @@ class PrimarySimple
 
     public function whereRow(TableSelect $select, $primaryVal) : void
     {
-        $select->where("{$this->col} = ", $primaryVal);
+        $qcol = $select->quoteIdentifier($this->col);
+        $select->where("{$qcol} = ", $primaryVal);
     }
 
     public function whereRows(TableSelect $select, array $primaryVals) : void
     {
-        $select->where("{$this->col} IN ", $primaryVals);
+        $qcol = $select->quoteIdentifier($this->col);
+        $select->where("{$qcol} IN ", $primaryVals);
     }
 }

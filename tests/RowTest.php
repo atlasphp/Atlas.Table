@@ -6,6 +6,12 @@ use Atlas\Testing\DataSource\Employee\EmployeeRow;
 
 class RowTest extends \PHPUnit\Framework\TestCase
 {
+    public function testConstructWithExtraKeys()
+    {
+        $row = new EmployeeRow(['no_such_col' => 'foo']);
+        $this->assertInstanceOf(EmployeeRow::CLASS, $row);
+    }
+
     public function testGetMissingCol()
     {
         $row = new EmployeeRow();
