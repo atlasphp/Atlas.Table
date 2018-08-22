@@ -144,4 +144,22 @@ class RowTest extends \PHPUnit\Framework\TestCase
         $diff = ['name' => 'baz'];
         $this->assertSame($diff, $row->getArrayDiff());
     }
+
+    public function testIterator()
+    {
+        $init = [
+            'id' => 1,
+            'name' => 'foo',
+            'building' => 'bar',
+            'floor' => 2,
+        ];
+
+        $row = new EmployeeRow($init);
+        foreach ($row as $key => $val) {
+            $this->assertSame($init[$key], $val);
+            unset($init[$key]);
+        }
+
+        $this->assertEmpty($init);
+    }
 }

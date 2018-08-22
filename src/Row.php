@@ -10,10 +10,13 @@ declare(strict_types=1);
 
 namespace Atlas\Table;
 
+use ArrayIterator;
 use Atlas\Table\Exception;
+use IteratorAggregate;
 use JsonSerializable;
+use Traversable;
 
-abstract class Row implements JsonSerializable
+abstract class Row implements IteratorAggregate, JsonSerializable
 {
     const INSERT = 'INSERT';
     const UPDATE = 'UPDATE';
@@ -81,6 +84,11 @@ abstract class Row implements JsonSerializable
 
         $this->assertHas($col);
         $this->modify($col, null);
+    }
+
+    public function getIterator() : Traversable
+    {
+        return new ArrayIterator($this->cols);
     }
 
     public function set(array $cols = []) : void
