@@ -162,4 +162,44 @@ class RowTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEmpty($init);
     }
+
+    public function testIsModified_numericToBool()
+    {
+        $init = [
+            'id' => 1,
+            'name' => 'foo',
+            'building' => 'bar',
+            'floor' => 1,
+        ];
+
+        $row = new EmployeeRow($init);
+
+        $row->floor = true;
+        $diff = $row->getArrayDiff();
+        $this->assertEmpty($diff);
+
+        $row->floor = false;
+        $diff = $row->getArrayDiff();
+        $this->assertSame(['floor' => false], $diff);
+    }
+
+    public function testIsModified_boolToNumeric()
+    {
+        $init = [
+            'id' => 1,
+            'name' => 'foo',
+            'building' => 'bar',
+            'floor' => true,
+        ];
+
+        $row = new EmployeeRow($init);
+
+        $row->floor = 1;
+        $diff = $row->getArrayDiff();
+        $this->assertEmpty($diff);
+
+        $row->floor = 0;
+        $diff = $row->getArrayDiff();
+        $this->assertSame(['floor' => 0], $diff);
+    }
 }
