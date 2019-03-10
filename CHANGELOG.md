@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 1.3.0
+
+This release implements IteratorAggregate on Row objects so you can foreach()
+over their columns.
+
+Also, Row::isModified() now booleans compares as integers, so that a change
+from 1 => true or 0 => false (and vice versa) is no longer considered a
+difference. This should help reduce "Expected 1 row affected, actual 0" errors
+with some databases (notably MySQL).
+
 ## 1.2.0
 
 This release adds automatic identifier quoting for the FROM/INTO table name (via
