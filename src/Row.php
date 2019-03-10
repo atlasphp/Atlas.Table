@@ -192,8 +192,13 @@ abstract class Row implements IteratorAggregate, JsonSerializable
 
     protected function isModified(string $col) : bool
     {
-        $old = $this->init[$col];
-        $new = $this->cols[$col];
+        $old = is_bool($this->init[$col])
+            ? (int) $this->init[$col]
+            : $this->init[$col];
+
+        $new = is_bool($this->cols[$col])
+            ? (int) $this->cols[$col]
+            : $this->cols[$col];
 
         return (is_numeric($old) && is_numeric($new))
             ? $old != $new // numeric, compare loosely
