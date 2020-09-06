@@ -56,7 +56,7 @@ abstract class Table
         $this->queryFactory = $queryFactory;
         $this->tableEvents = $tableEvents;
         $this->rowClass = substr(static::CLASS, 0, -5) . 'Row';
-        if (count($this::PRIMARY_KEY) < 2) {
+        if (count($this::PRIMARY_KEY) == 1) {
             $this->primaryKey = new PrimarySimple($this::PRIMARY_KEY[0]);
         } else {
             $this->primaryKey = new PrimaryComposite($this::PRIMARY_KEY);
