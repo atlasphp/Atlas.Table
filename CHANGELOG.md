@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.4.0
+
+The methods Table::updateRowPerform() and deleteRowPerform() now throw an
+exception when the table does not have a primary key.
+
 ## 1.3.0
 
 This release implements IteratorAggregate on Row objects so you can foreach()
