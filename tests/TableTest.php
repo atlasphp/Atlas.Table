@@ -8,6 +8,8 @@ use Atlas\Testing\CompositeDataSource\Course\CourseTable;
 use Atlas\Testing\CompositeDataSourceFixture;
 use Atlas\Testing\DataSource\Employee\EmployeeRow;
 use Atlas\Testing\DataSource\Employee\EmployeeTable;
+use Atlas\Testing\DataSource\Nopkey\NopkeyRow;
+use Atlas\Testing\DataSource\Nopkey\NopkeyTable;
 use Atlas\Testing\DataSourceFixture;
 use PDO;
 use PDOStatement;
@@ -388,5 +390,37 @@ class TableTest extends \PHPUnit\Framework\TestCase
     {
         $conn = $this->table->getWriteConnection();
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+    }
+
+    public function testUpdateRow_noPrimaryKey()
+    {
+        $table = $this->tableLocator->get(NopkeyTable::CLASS);
+        $row = $table->newRow([
+            'name' => 'Bolivar Shagnasty',
+            'email' => 'boshag@example.com',
+        ]);
+        $table->insertRow($row);
+
+        $row->email = 'boshag@example.org';
+        $this->expectException(Exception::CLASS);
+        $this->expectExceptionMessage("Cannot update row on table 'nopkeys' without primary key.");
+
+        $table->updateRow($row);
+    }
+
+    public function testDeleteRow_noPrimaryKey()
+    {
+        $table = $this->tableLocator->get(NopkeyTable::CLASS);
+        $row = $table->newRow([
+            'name' => 'Bolivar Shagnasty',
+            'email' => 'boshag@example.com',
+        ]);
+        $table->insertRow($row);
+
+        $row->email = 'boshag@example.org';
+        $this->expectException(Exception::CLASS);
+        $this->expectExceptionMessage("Cannot delete row on table 'nopkeys' without primary key.");
+
+        $table->deleteRow($row);
     }
 }

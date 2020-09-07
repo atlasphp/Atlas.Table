@@ -199,7 +199,7 @@ abstract class Table
         }
 
         if (empty(static::PRIMARY_KEY)) {
-            throw Exception::cannotPerformWithoutPrimaryKey('update', static::NAME);
+            throw Exception::cannotPerformWithoutPrimaryKey('update row', static::NAME);
         }
 
         $pdoStatement = $update->perform();
@@ -249,7 +249,7 @@ abstract class Table
         }
 
         if (empty(static::PRIMARY_KEY)) {
-            throw Exception::cannotPerformWithoutPrimaryKey('delete', static::NAME);
+            throw Exception::cannotPerformWithoutPrimaryKey('delete row', static::NAME);
         }
 
         $pdoStatement = $delete->perform();
