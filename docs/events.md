@@ -63,6 +63,14 @@ function afterDeleteRow(
 ) : void
 ```
 
+> **Note:**
+>
+> The methods `beforeInsertRow()` and `beforeUpdateRow()` optionally return an
+> array. If they return an array, that array's key-value pairs will be used for
+> the insert or update. Otherwise, the difference between the Row's previous
+> values and its current values will be calculated, and their difference will be
+> used for the insert or update.
+
 For example, when you call `Table::updateRow()`, these events run in this order:
 
 - `beforeUpdateRow()`
