@@ -181,8 +181,7 @@ abstract class Table
         $update = $this->update();
         foreach (static::PRIMARY_KEY as $primaryCol) {
             if (array_key_exists($primaryCol, $diff)) {
-                $message = "Primary key value for '$primaryCol' changed";
-                throw new Exception($message);
+                throw Exception::primaryValueChanged($primaryCol);
             }
             $update->where("{$primaryCol} = ", $row->$primaryCol);
             unset($diff[$primaryCol]);
@@ -197,6 +196,10 @@ abstract class Table
     {
         if (! $update->hasColumns()) {
             return null;
+        }
+
+        if (empty(static::PRIMARY_KEY)) {
+            throw Exception::cannotPerformWithoutPrimaryKey('update row', static::NAME);
         }
 
         $pdoStatement = $update->perform();
@@ -243,6 +246,10 @@ abstract class Table
     {
         if ($row->getStatus() === $row::DELETED) {
             return null;
+        }
+
+        if (empty(static::PRIMARY_KEY)) {
+            throw Exception::cannotPerformWithoutPrimaryKey('delete row', static::NAME);
         }
 
         $pdoStatement = $delete->perform();

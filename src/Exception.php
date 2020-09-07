@@ -57,6 +57,18 @@ class Exception extends \Exception
         return new Exception($message);
     }
 
+    public static function primaryValueChanged(string $col) : Exception
+    {
+        $message = "Primary key value for '$col' changed";
+        return new Exception($message);
+    }
+
+    public static function cannotPerformWithoutPrimaryKey(string $operation, string $table) : Exception
+    {
+        $message = "Cannot {$operation} on table '$table' without primary key.";
+        return new Exception($message);
+    }
+
     public static function tableAlreadySet() : Exception
     {
         return new Exception("Table already set.");
