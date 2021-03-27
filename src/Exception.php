@@ -12,7 +12,10 @@ namespace Atlas\Table;
 
 class Exception extends \Exception
 {
-    public static function propertyDoesNotExist(string $class, string $property) : Exception
+    public static function propertyDoesNotExist(
+        string $class,
+        string $property
+    ) : Exception
     {
         return new Exception("{$class}::\${$property} does not exist.");
     }
@@ -22,35 +25,31 @@ class Exception extends \Exception
         return new Exception("{$class} not found in table locator.");
     }
 
-    public static function invalidType(string $expect, $actual) : Exception
-    {
-        if (is_object($actual)) {
-            $actual = get_class($actual);
-        } else {
-            $actual = gettype($actual);
-        }
-
-        return new Exception("Expected type $expect; got $actual instead.");
-    }
-
-    public static function unexpectedRowCountAffected($count)
+    public static function unexpectedRowCountAffected(int $count) : Exception
     {
         return new Exception("Expected 1 row affected, actual {$count}.");
     }
 
-    public static function immutableOnceDeleted(string $class, string $property)
+    public static function immutableOnceDeleted(
+        string $class,
+        string $property
+    ) : Exception
     {
-        return new Exception("{$class}::\${$property} is immutable after Row is deleted.");
+        $classProp = "{$class}::\${$property}";
+        return new Exception("{$classProp} is immutable after Row is deleted.");
     }
 
-    public static function primaryValueNotScalar(string $col, $val)
+    public static function primaryValueNotScalar(
+        string $col,
+        mixed $val
+    ) : Exception
     {
         $message = "Expected scalar value for primary key '{$col}', "
             . "got " . gettype($val) . " instead.";
         return new Exception($message);
     }
 
-    public static function primaryValueMissing(string $col)
+    public static function primaryValueMissing(string $col) : Exception
     {
         $message = "Expected scalar value for primary key '$col', "
             . "value is missing instead.";
@@ -59,25 +58,26 @@ class Exception extends \Exception
 
     public static function primaryValueChanged(string $col) : Exception
     {
-        $message = "Primary key value for '$col' changed";
+        $message = "Primary key value for '$col' changed.";
         return new Exception($message);
     }
 
-    public static function cannotPerformWithoutPrimaryKey(string $operation, string $table) : Exception
+    public static function cannotPerformWithoutPrimaryKey(
+        string $operation,
+        string $table
+    ) : Exception
     {
         $message = "Cannot {$operation} on table '$table' without primary key.";
         return new Exception($message);
     }
 
-    public static function tableAlreadySet() : Exception
-    {
-        return new Exception("Table already set.");
-    }
-
-    public static function unexpectedOption($value, array $options)
+    public static function unexpectedOption(
+        mixed $option,
+        array $options
+    ) : Exception
     {
         $message = "Expected one of '" . implode("','", $options)
-            . "'; got '{$value}' instead.";
+            . "'; got '{$option}' instead.";
         return new Exception($message);
     }
 }

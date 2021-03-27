@@ -12,17 +12,20 @@ namespace Atlas\Table;
 
 use Atlas\Query\Delete;
 use Atlas\Query\Insert;
-use Atlas\Query\Select;
 use Atlas\Query\Update;
 use PDOStatement;
 
 abstract class TableEvents
 {
-    public function modifySelect(Table $table, Select $select) : void
+    public function modifySelect(Table $table, TableSelect $select) : void
     {
     }
 
     public function modifySelectedRow(Table $table, Row $row) : void
+    {
+    }
+
+    public function modifyInsert(Table $table, Insert $insert) : void
     {
     }
 
@@ -44,6 +47,10 @@ abstract class TableEvents
     {
     }
 
+    public function modifyUpdate(Table $table, Update $update) : void
+    {
+    }
+
     public function beforeUpdateRow(Table $table, Row $row) : ?array
     {
         return null;
@@ -62,6 +69,10 @@ abstract class TableEvents
     {
     }
 
+    public function modifyDelete(Table $table, Delete $delete) : void
+    {
+    }
+
     public function beforeDeleteRow(Table $table, Row $row) : void
     {
     }
@@ -76,18 +87,6 @@ abstract class TableEvents
         Delete $delete,
         PDOStatement $pdoStatement
     ) : void
-    {
-    }
-
-    public function modifyInsert(Table $table, Insert $insert) : void
-    {
-    }
-
-    public function modifyUpdate(Table $table, Update $update) : void
-    {
-    }
-
-    public function modifyDelete(Table $table, Delete $delete) : void
     {
     }
 }

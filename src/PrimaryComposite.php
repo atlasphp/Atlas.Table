@@ -12,7 +12,7 @@ namespace Atlas\Table;
 
 class PrimaryComposite
 {
-    protected $cols;
+    protected array $cols;
 
     public function __construct(array $cols)
     {
@@ -43,7 +43,7 @@ class PrimaryComposite
         }
     }
 
-    protected function assertCompositePart(array $primaryVal, string $col)
+    protected function assertCompositePart(array $primaryVal, string $col) : void
     {
         if (! isset($primaryVal[$col])) {
             throw Exception::primaryValueMissing($col);

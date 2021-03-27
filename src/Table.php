@@ -15,7 +15,6 @@ use Atlas\Pdo\ConnectionLocator;
 use Atlas\Query\Bind;
 use Atlas\Query\Delete;
 use Atlas\Query\Insert;
-use Atlas\Query\QueryFactory;
 use Atlas\Query\Select;
 use Atlas\Query\Update;
 use Atlas\Table\Exception;
@@ -37,27 +36,18 @@ abstract class Table
 
     const AUTOINC_SEQUENCE = null;
 
-    protected $queryFactory;
+    protected string $rowClass;
 
-    protected $rowClass;
-
-    protected $connectionLocator;
-
-    protected $tableEvents;
-
-    protected $primaryKey;
+    protected PrimarySimple|PrimaryComposite $primaryKey;
 
     public function __construct(
-        ConnectionLocator $connectionLocator,
-        QueryFactory $queryFactory,
-        TableEvents $tableEvents
+        protected ConnectionLocator $connectionLocator,
+        protected TableEvents $tableEvents
     ) {
-        $this->connectionLocator = $connectionLocator;
-        $this->queryFactory = $queryFactory;
-        $this->tableEvents = $tableEvents;
         $this->rowClass = substr(static::CLASS, 0, -5) . 'Row';
+
         if (count($this::PRIMARY_KEY) == 1) {
-            $this->primaryKey = new PrimarySimple($this::PRIMARY_KEY[0]);
+            $this->primaryKey = new PrimarySimple($this::PRIMARY_KEY);
         } else {
             $this->primaryKey = new PrimaryComposite($this::PRIMARY_KEY);
         }
@@ -73,7 +63,7 @@ abstract class Table
         return $this->connectionLocator->getWrite();
     }
 
-    public function fetchRow($primaryVal) : ?Row
+    public function fetchRow(mixed $primaryVal) : ?Row
     {
         return $this->selectRow($this->select(), $primaryVal);
     }
@@ -85,15 +75,15 @@ abstract class Table
 
     public function select(array $whereEquals = []) : TableSelect
     {
-        $select = $this->queryFactory->newSelect($this->getReadConnection());
-        $select->setTable($this);
+        $class = get_class($this) . 'Select';
+        $select = $class::new($this->getReadConnection(), $this);
         $select->from($select->quoteIdentifier(static::NAME));
         $select->whereEquals($whereEquals);
         $this->tableEvents->modifySelect($this, $select);
         return $select;
     }
 
-    public function selectRow(TableSelect $select, $primaryVal) : ?Row
+    public function selectRow(TableSelect $select, mixed $primaryVal) : ?Row
     {
         $this->primaryKey->whereRow($select, $primaryVal);
         return $select->fetchRow();
@@ -107,7 +97,7 @@ abstract class Table
 
     public function insert() : Insert
     {
-        $insert = $this->queryFactory->newInsert($this->getWriteConnection());
+        $insert = Insert::new($this->getWriteConnection());
         $insert->into($insert->quoteIdentifier(static::NAME));
         $this->tableEvents->modifyInsert($this, $insert);
         return $insert;
@@ -153,13 +143,13 @@ abstract class Table
 
         $this->tableEvents->afterInsertRow($this, $row, $insert, $pdoStatement);
 
-        $row->init($row::INSERTED);
+        $row->setLastAction($row::INSERT);
         return $pdoStatement;
     }
 
     public function update() : Update
     {
-        $update = $this->queryFactory->newUpdate($this->getWriteConnection());
+        $update = Update::new($this->getWriteConnection());
         $update->table($update->quoteIdentifier(static::NAME));
         $this->tableEvents->modifyUpdate($this, $update);
         return $update;
@@ -211,13 +201,13 @@ abstract class Table
 
         $this->tableEvents->afterUpdateRow($this, $row, $update, $pdoStatement);
 
-        $row->init($row::UPDATED);
+        $row->setLastAction($row::UPDATE);
         return $pdoStatement;
     }
 
     public function delete() : Delete
     {
-        $delete = $this->queryFactory->newDelete($this->getWriteConnection());
+        $delete = Delete::new($this->getWriteConnection());
         $delete->from($delete->quoteIdentifier(static::NAME));
         $this->tableEvents->modifyDelete($this, $delete);
         return $delete;
@@ -244,7 +234,7 @@ abstract class Table
 
     public function deleteRowPerform(Row $row, Delete $delete) : ?PDOStatement
     {
-        if ($row->getStatus() === $row::DELETED) {
+        if ($row->getLastAction() === $row::DELETE) {
             return null;
         }
 
@@ -260,7 +250,7 @@ abstract class Table
         }
 
         $this->tableEvents->afterDeleteRow($this, $row, $delete, $pdoStatement);
-        $row->init($row::DELETED);
+        $row->setLastAction($row::DELETE);
         return $pdoStatement;
     }
 
@@ -274,7 +264,7 @@ abstract class Table
     {
         $row = $this->newRow($cols);
         $this->tableEvents->modifySelectedRow($this, $row);
-        $row->init($row::SELECTED);
+        $row->setLastAction($row::SELECT);
         return $row;
     }
 }

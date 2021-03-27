@@ -14,30 +14,19 @@ use Atlas\Pdo\ConnectionLocator;
 
 class TableLocator
 {
-    protected $connectionLocator;
-
-    protected $tableQueryFactory;
-
-    protected $factory;
-
-    protected $tables = [];
-
-    public static function new(...$args) : TableLocator
+    static public function new(mixed ...$args) : static
     {
-        return new TableLocator(
-            ConnectionLocator::new(...$args),
-            new TableQueryFactory()
+        return new static(
+            ConnectionLocator::new(...$args)
         );
     }
 
+    protected array $instances = [];
+
     public function __construct(
-        ConnectionLocator $connectionLocator,
-        TableQueryFactory $tableQueryFactory,
-        callable $factory = null
+        protected ConnectionLocator $connectionLocator,
+        protected mixed /* callable */ $factory = null
     ) {
-        $this->connectionLocator = $connectionLocator;
-        $this->tableQueryFactory = $tableQueryFactory;
-        $this->factory = $factory;
         if ($this->factory === null) {
             $this->factory = function ($class) {
                 return new $class();
@@ -47,7 +36,8 @@ class TableLocator
 
     public function has(string $tableClass) : bool
     {
-        return class_exists($tableClass) && is_subclass_of($tableClass, Table::CLASS);
+        return class_exists($tableClass)
+            && is_subclass_of($tableClass, Table::CLASS);
     }
 
     public function get(string $tableClass) : Table
@@ -72,7 +62,6 @@ class TableLocator
     {
         return new $tableClass(
             $this->connectionLocator,
-            $this->tableQueryFactory->newQueryFactory($tableClass),
             ($this->factory)($tableClass . 'Events')
         );
     }

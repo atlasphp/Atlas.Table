@@ -2,14 +2,13 @@
 namespace Atlas\Table;
 
 use Atlas\Pdo\ConnectionLocator;
-use Atlas\Query\QueryFactory;
-use Atlas\Testing\DataSource\Employee\EmployeeTable;
-use Atlas\Testing\DataSource\Employee\EmployeeTableEvents;
-use Atlas\Testing\DataSourceFixture;
+use Atlas\Table\DataSource\DataSourceFixture;
+use Atlas\Table\DataSource\Employee\EmployeeTable;
+use Atlas\Table\DataSource\Employee\EmployeeTableEvents;
 
 class TableLocatorTest extends \PHPUnit\Framework\TestCase
 {
-    protected function setUp()
+    protected function setUp() : void
     {
         $connection = (new DataSourceFixture())->exec();
         $this->tableLocator = TableLocator::new($connection);

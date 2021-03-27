@@ -2,9 +2,9 @@
 namespace Atlas\Table;
 
 use Atlas\Table\Container;
-use Atlas\Testing\DataSource\Employee\EmployeeRow;
-use Atlas\Testing\DataSource\Employee\EmployeeTable;
-use Atlas\Testing\DataSourceFixture;
+use Atlas\Table\DataSource\DataSourceFixture;
+use Atlas\Table\DataSource\Employee\EmployeeRow;
+use Atlas\Table\DataSource\Employee\EmployeeTable;
 
 class TableSelectTest extends \PHPUnit\Framework\TestCase
 {
@@ -12,7 +12,7 @@ class TableSelectTest extends \PHPUnit\Framework\TestCase
 
     protected $table;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $connection = (new DataSourceFixture())->exec();
         $this->table = TableLocator::new($connection)->get(EmployeeTable::CLASS);
@@ -80,12 +80,5 @@ class TableSelectTest extends \PHPUnit\Framework\TestCase
 
         $actual = $this->select->fetchCount();
         $this->assertSame(12, $actual);
-    }
-
-    public function testTableAlreadySet()
-    {
-        $this->expectException(Exception::CLASS);
-        $this->expectExceptionMessage('Table already set.');
-        $this->select->setTable($this->table);
     }
 }

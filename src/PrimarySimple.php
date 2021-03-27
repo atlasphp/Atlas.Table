@@ -12,14 +12,14 @@ namespace Atlas\Table;
 
 class PrimarySimple
 {
-    protected $col;
+    protected string $col;
 
-    public function __construct(string $col)
+    public function __construct(array $cols)
     {
-        $this->col = $col;
+        $this->col = reset($cols);
     }
 
-    public function whereRow(TableSelect $select, $primaryVal) : void
+    public function whereRow(TableSelect $select, mixed $primaryVal) : void
     {
         $qcol = $select->quoteIdentifier($this->col);
         $select->where("{$qcol} = ", $primaryVal);

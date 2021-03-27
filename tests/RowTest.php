@@ -2,7 +2,7 @@
 namespace Atlas\Table;
 
 use Atlas\Table\Exception;
-use Atlas\Testing\DataSource\Employee\EmployeeRow;
+use Atlas\Table\DataSource\Employee\EmployeeRow;
 
 class RowTest extends \PHPUnit\Framework\TestCase
 {
@@ -29,7 +29,7 @@ class RowTest extends \PHPUnit\Framework\TestCase
     public function testSetWhenDeleted()
     {
         $row = new EmployeeRow();
-        $row->init($row::DELETED);
+        $row->setLastAction($row::DELETE);
         $this->expectException(Exception::CLASS);
         $row->id = 'foo';
     }
@@ -53,7 +53,7 @@ class RowTest extends \PHPUnit\Framework\TestCase
     public function testUnsetWhenDeleted()
     {
         $row = new EmployeeRow();
-        $row->init($row::DELETED);
+        $row->setLastAction($row::DELETE);
         $this->expectException(Exception::CLASS);
         unset($row->name);
     }
@@ -63,26 +63,6 @@ class RowTest extends \PHPUnit\Framework\TestCase
         $row = new EmployeeRow();
         $this->expectException(Exception::CLASS);
         unset($row->no_such_col);
-    }
-
-    public function testInvalidModification_object()
-    {
-        $row = new EmployeeRow();
-        $this->expectException(Exception::CLASS);
-        $this->expectExceptionMessage(
-            'Expected type scalar or null; got stdClass instead.'
-        );
-        $row->name = (object) [];
-    }
-
-    public function testInvalidModification_other()
-    {
-        $row = new EmployeeRow();
-        $this->expectException(Exception::CLASS);
-        $this->expectExceptionMessage(
-            'Expected type scalar or null; got array instead.'
-        );
-        $row->name = [];
     }
 
     public function testSet()
@@ -101,25 +81,43 @@ class RowTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expect, $actual);
     }
 
-    public function testActionStatusDelete()
+    public function testActionTracking()
     {
         $row = new EmployeeRow();
-        $this->assertSame('', $row->getStatus());
-        $this->assertSame($row::INSERT, $row->getAction());
 
-        $row->init($row::SELECTED);
-        $this->assertSame($row::SELECTED, $row->getStatus());
-        $this->assertSame('', $row->getAction());
+        // new row; needs insert
+        $this->assertSame(null, $row->getLastAction());
+        $this->assertSame($row::INSERT, $row->getNextAction());
 
-        $row->name = 'New Name';
-        $this->assertSame($row::SELECTED, $row->getStatus());
-        $this->assertSame($row::UPDATE, $row->getAction());
-
+        // mark for deletion on new row; no next action
         $row->setDelete(true);
-        $this->assertSame($row::DELETE, $row->getAction());
+        $this->assertSame(null, $row->getNextAction());
+
+        // unmark for deletion; back to insert
+        $row->setDelete(false);
+        $this->assertSame($row::INSERT, $row->getNextAction());
+
+        // selected row, no changes: no action
+        $row->setLastAction($row::SELECT);
+        $this->assertSame($row::SELECT, $row->getLastAction());
+        $this->assertSame(null, $row->getNextAction());
+
+        // change the name; needs update
+        $row->name = 'New Name';
+        $this->assertSame($row::SELECT, $row->getLastAction());
+        $this->assertSame($row::UPDATE, $row->getNextAction());
+
+        // revert the name; no next action
+        $row->name = null;
+        $this->assertSame($row::SELECT, $row->getLastAction());
+        $this->assertSame(null, $row->getNextAction());
+
+        // mark fot deletion
+        $row->setDelete(true);
+        $this->assertSame($row::DELETE, $row->getNextAction());
 
         $this->expectException(Exception::CLASS);
-        $row->init('NO_SUCH_STATUS');
+        $row->setLastAction('NO_SUCH_STATUS');
     }
 
     public function testGetArray()
@@ -132,7 +130,7 @@ class RowTest extends \PHPUnit\Framework\TestCase
         ];
 
         $row = new EmployeeRow($init);
-        $row->init($row::SELECTED);
+        $row->setLastAction($row::SELECT);
 
         $row->name = 'baz';
         $this->assertSame($init, $row->getArrayInit());
@@ -155,6 +153,7 @@ class RowTest extends \PHPUnit\Framework\TestCase
         ];
 
         $row = new EmployeeRow($init);
+
         foreach ($row as $key => $val) {
             $this->assertSame($init[$key], $val);
             unset($init[$key]);

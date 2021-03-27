@@ -6,7 +6,7 @@ Create a new Row using the `newRow()` method. You can assign data using
 properties, or pass an array of initial data to populate into the Row.
 
 ```php
-$threadRow = $atlas->newRow([
+$threadRow = $threadTable->newRow([
     'title' => 'New Thread Title',
 ]);
 ```
@@ -29,7 +29,7 @@ $threadTable->insertRow($threadRow);
 > The insertRow() method will not catch exceptions; you may wish to wrap the
 > method call in a try/catch block.
 
-Inserting a Row into a table with an auto-incrementing primary key will
+Inserting a _Row_ into a table with an auto-incrementing primary key will
 automatically modify the Row to set the last-inserted ID.
 
 ## Updating an Existing Row
@@ -81,7 +81,7 @@ and `delete()`. These latter three methods return Atlas.Query objects for you
 to work with as you see fit; call `perform()` on them directly to execute the
 query and get back a _PDOStatement_.
 
-See the [Atlas.Query](/cassini/query/) documentation for more information on
+See the [Atlas.Query](/dymaxion/query/) documentation for more information on
 the insert, update, and delete query objects.
 
 ## Identifier Quoting

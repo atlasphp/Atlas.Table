@@ -17,22 +17,32 @@ to your `composer.json` file, then call `composer update`.
 ## Instantiation
 
 Before using Atlas.Table, you will need to create the prerequsite data-source
-classes using the [skeleton generator](/cassini/skeleton).
+classes using the [skeleton generator](/dymaxion/skeleton).
 
 Once you have your data source classes in place, create a _TableLocator_ using
-the static `new()` method and pass your PDO connection parameters:
+the static `new()` method and pass in an Atlas.Pdo _Connection_:
 
 ```php
+use Atlas\Pdo\Connection;
 use Atlas\Table\TableLocator;
 
-$tableLocator = TableLocator::new('sqlite::memory:');
+$connection = Connection::new('sqlite::memory');
+$tableLocator = TableLocator::new($connection);
 ```
 
-> **Tip:**
->
-> Alternatively, you can pass an already-created Atlas.Pdo _Connection_ object.
+Alternatively, you can pass an existing PDO instance, or a set of PDO
+constructor arguments:
 
-You can then use the locator to retrieve a _Table_ by its class name.
+```php
+// existing PDO connection
+$pdo = new PDO('sqlite::memory');
+$tableLocator = TableLocator::new($pdo);
+
+// PDO constructor arguments
+$tableLocator = TableLocator::new('sqlite::memory');
+```
+
+You can then use the _TableLocator_ to retrieve a _Table_ by its class name.
 
 ```php
 use Atlas\Testing\DataSource\Thread\ThreadTable;

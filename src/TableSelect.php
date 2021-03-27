@@ -10,20 +10,22 @@ declare(strict_types=1);
 
 namespace Atlas\Table;
 
-use Atlas\Pdo\Connection;
-use Atlas\Query\Bind;
 use Atlas\Query\Select;
 
 abstract class TableSelect extends Select
 {
-    protected $table;
-
-    public function setTable(Table $table)
+    static public function new(mixed $arg, mixed ...$args) : static
     {
-        if (isset($this->table)) {
-            throw Exception::tableAlreadySet();
-        }
+        $table = array_pop($args);
+        $select = parent::new($arg, ...$args);
+        $select->setTable($table);
+        return $select;
+    }
 
+    protected Table $table;
+
+    protected function setTable(Table $table) : void
+    {
         $this->table = $table;
     }
 
@@ -58,7 +60,8 @@ abstract class TableSelect extends Select
     public function fetchCount(string $column = '*') : int
     {
         $select = clone $this;
-        $select->resetColumns()
+        $select
+            ->resetColumns()
             ->resetLimit()
             ->columns("COUNT({$column})");
 

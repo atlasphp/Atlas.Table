@@ -12,9 +12,9 @@
         }
     ],
     "require": {
-        "php": ">=7.1.0",
-        "atlas/pdo": "~1.0",
-        "atlas/query": "~1.0"
+        "php": "^8.0",
+        "atlas/pdo": "2.x-dev",
+        "atlas/query": "2.x-dev"
     },
     "autoload": {
         "psr-4": {
@@ -23,15 +23,20 @@
     },
     "require-dev": {
         "atlas/testing": "~1.0",
-        "pds/skeleton": "~1.0",
-        "phpunit/phpunit": "~7.0"
+        "pds/skeleton": "^1.0",
+        "phpunit/phpunit": "^9.0",
+        "phpstan/phpstan": "^0.12.82"
     },
     "autoload-dev": {
         "psr-4": {
             "Atlas\\Table\\": "tests/"
         }
     },
+    "scripts": {
+        "test": "./vendor/bin/phpunit",
+        "stan": "./vendor/bin/phpstan analyze -c phpstan.neon src"
+    },
     "suggest": {
-        "atlas/cli": "A command-line tool to build skeleton classes."
+        "atlas/skeleton": "A command-line tool to build skeleton classes."
     }
 }

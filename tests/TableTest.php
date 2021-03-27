@@ -1,16 +1,15 @@
 <?php
 namespace Atlas\Table;
 
+use Atlas\Table\Assertions;
+use Atlas\Table\DataSource\Course\CourseRow;
+use Atlas\Table\DataSource\Course\CourseTable;
+use Atlas\Table\DataSource\DataSourceFixture;
+use Atlas\Table\DataSource\Employee\EmployeeRow;
+use Atlas\Table\DataSource\Employee\EmployeeTable;
+use Atlas\Table\DataSource\Nopkey\NopkeyRow;
+use Atlas\Table\DataSource\Nopkey\NopkeyTable;
 use Atlas\Table\Exception;
-use Atlas\Testing\Assertions;
-use Atlas\Testing\CompositeDataSource\Course\CourseRow;
-use Atlas\Testing\CompositeDataSource\Course\CourseTable;
-use Atlas\Testing\CompositeDataSourceFixture;
-use Atlas\Testing\DataSource\Employee\EmployeeRow;
-use Atlas\Testing\DataSource\Employee\EmployeeTable;
-use Atlas\Testing\DataSource\Nopkey\NopkeyRow;
-use Atlas\Testing\DataSource\Nopkey\NopkeyTable;
-use Atlas\Testing\DataSourceFixture;
 use PDO;
 use PDOStatement;
 
@@ -22,13 +21,17 @@ class TableTest extends \PHPUnit\Framework\TestCase
 
     protected $tableLocator;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $connection = (new DataSourceFixture())->exec();
-        (new CompositeDataSourceFixture($connection))->exec();
 
         $this->tableLocator = TableLocator::new($connection);
         $this->table = $this->tableLocator->get(EmployeeTable::CLASS);
+
+        $rc = new \ReflectionClass(\Atlas\Query\Bind::CLASS);
+        $rp = $rc->getProperty('instanceCount');
+        $rp->setAccessible(true);
+        $rp->setValue(0);
     }
 
     protected function logQueries()
@@ -74,9 +77,9 @@ class TableTest extends \PHPUnit\Framework\TestCase
             SELECT
                 *
             FROM
-                "employee"
+                "employees"
             WHERE
-                "id" = :__1__
+                "id" = :_1_1_
         ';
         $this->assertSameSql($expect, $actual);
 
@@ -96,6 +99,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->logQueries();
+
         $actual = $table->fetchRow([
             'course_subject' => 'MATH',
             'course_number' => '100'
@@ -112,7 +116,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
             FROM
                 "courses"
             WHERE
-                "course_subject" = :__1__ AND "course_number" = :__2__
+                "course_subject" = :_1_1_ AND "course_number" = :_1_2_
         ';
         $this->assertSameSql($expect, $actual);
     }
@@ -185,9 +189,9 @@ class TableTest extends \PHPUnit\Framework\TestCase
             SELECT
                 *
             FROM
-                "employee"
+                "employees"
             WHERE
-                "id" IN (:__1__, :__2__, :__3__)
+                "id" IN (:_1_1_, :_1_2_, :_1_3_)
         ';
         $this->assertSameSql($expect, $actual);
 
@@ -237,9 +241,9 @@ class TableTest extends \PHPUnit\Framework\TestCase
             FROM
                 "courses"
             WHERE
-                ("course_subject" = :__1__ AND "course_number" = :__2__)
-                OR ("course_subject" = :__3__ AND "course_number" = :__4__)
-                OR ("course_subject" = :__5__ AND "course_number" = :__6__)
+                ("course_subject" = :_1_1_ AND "course_number" = :_1_2_)
+                OR ("course_subject" = :_1_3_ AND "course_number" = :_1_4_)
+                OR ("course_subject" = :_1_5_ AND "course_number" = :_1_6_)
         ';
         $this->assertSameSql($expect, $actual);
     }
@@ -262,7 +266,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $queries = $this->getQueries();
         $actual = $queries[0]['statement'];
         $expect = '
-            INSERT INTO "employee" (
+            INSERT INTO "employees" (
                 "name",
                 "building",
                 "floor"
@@ -285,7 +289,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
             'floor' => '99',
         ];
         $actual = $this->table->getReadConnection()->fetchOne(
-            'SELECT * FROM employee WHERE id = 13'
+            'SELECT * FROM employees WHERE id = 13'
         );
         $this->assertSame($expect, $actual);
 
@@ -313,18 +317,18 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $queries = $this->getQueries();
         $actual = $queries[0]['statement'];
         $expect = '
-            UPDATE "employee"
+            UPDATE "employees"
             SET
                 "name" = :name
             WHERE
-                id = :__1__
+                id = :_2_1_
         ';
         $this->assertSameSql($expect, $actual);
 
         // was it *actually* updated?
         $expect = $row->getArrayCopy();
         $actual = $this->table->getReadConnection()->fetchOne(
-            "SELECT * FROM employee WHERE id = 1"
+            "SELECT * FROM employees WHERE id = 1"
         );
         $this->assertSame($expect, $actual);
 
@@ -333,7 +337,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
 
         // delete "out from under" the object ...
         $this->table->getWriteConnection()->perform(
-            "DELETE FROM employee WHERE id = ?",
+            "DELETE FROM employees WHERE id = ?",
             [$row->id]
         );
 
@@ -358,9 +362,9 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $queries = $this->getQueries();
         $actual = $queries[0]['statement'];
         $expect = '
-            DELETE FROM "employee"
+            DELETE FROM "employees"
             WHERE
-                id = :__1__
+                id = :_2_1_
         ';
         $this->assertSameSql($expect, $actual);
 
@@ -378,7 +382,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($actual);
 
         // sneaky sneaky
-        $row->init($row::SELECTED);
+        $row->setLastAction($row::SELECT);
         $this->expectException(Exception::CLASS);
         $this->expectExceptionMessage(
             "Expected 1 row affected, actual 0"
