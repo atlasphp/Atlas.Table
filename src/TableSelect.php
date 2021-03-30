@@ -18,16 +18,11 @@ abstract class TableSelect extends Select
     {
         $table = array_pop($args);
         $select = parent::new($arg, ...$args);
-        $select->setTable($table);
+        $select->table = $table;
         return $select;
     }
 
     protected Table $table;
-
-    protected function setTable(Table $table) : void
-    {
-        $this->table = $table;
-    }
 
     public function fetchRow() : ?Row
     {
