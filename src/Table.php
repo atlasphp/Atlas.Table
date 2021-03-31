@@ -76,9 +76,7 @@ abstract class Table
     public function select(array $whereEquals = []) : TableSelect
     {
         $class = get_class($this) . 'Select';
-        $select = $class::new($this->getReadConnection(), $this);
-        $select->from($select->quoteIdentifier(static::NAME));
-        $select->whereEquals($whereEquals);
+        $select = $class::new($this->getReadConnection(), $this, $whereEquals);
         $this->tableEvents->modifySelect($this, $select);
         return $select;
     }

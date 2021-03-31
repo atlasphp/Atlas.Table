@@ -14,11 +14,22 @@ use Atlas\Query\Select;
 
 abstract class TableSelect extends Select
 {
+    /**
+     * Returns a new TableSelect object.
+     *
+     * @param Connection $connection A read connection.
+     * @param Table $table The table being selected from.
+     * @param array $whereEquals Equality pairs of columns and values.
+     * @return static
+     */
     static public function new(mixed $arg, mixed ...$args) : static
     {
+        $whereEquals = array_pop($args);
         $table = array_pop($args);
         $select = parent::new($arg, ...$args);
         $select->table = $table;
+        $select->from($select->quoteIdentifier($table::NAME));
+        $select->whereEquals($whereEquals);
         return $select;
     }
 
