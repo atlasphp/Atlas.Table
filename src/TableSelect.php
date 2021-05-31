@@ -42,7 +42,7 @@ abstract class TableSelect extends Select
         }
 
         $cols = $this->fetchOne();
-        if ($cols === null) {
+        if ($cols === false) {
             return null;
         }
 
