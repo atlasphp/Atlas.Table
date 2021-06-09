@@ -72,8 +72,8 @@ abstract class TableSelect extends Select
             ->columns("COUNT({$column})");
 
         return (int) $this->table->getReadConnection()->fetchValue(
-            $select->getStatement(),
-            $select->getBindValues()
+            $select->getQueryString(),
+            $select->getBindValueArrays()
         );
     }
 }

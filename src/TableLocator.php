@@ -28,7 +28,7 @@ class TableLocator
         protected mixed /* callable */ $factory = null
     ) {
         if ($this->factory === null) {
-            $this->factory = function ($class) {
+            $this->factory = function (string $class) : object {
                 return new $class();
             };
         }

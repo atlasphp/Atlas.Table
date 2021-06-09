@@ -1,6 +1,7 @@
 <?php
 namespace Atlas\Table;
 
+use Atlas\Statement\Bind;
 use Atlas\Table\Assertions;
 use Atlas\Table\DataSource\Course\CourseRow;
 use Atlas\Table\DataSource\Course\CourseTable;
@@ -12,6 +13,7 @@ use Atlas\Table\DataSource\Nopkey\NopkeyTable;
 use Atlas\Table\Exception;
 use PDO;
 use PDOStatement;
+use ReflectionClass;
 
 class TableTest extends \PHPUnit\Framework\TestCase
 {
@@ -28,7 +30,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $this->tableLocator = TableLocator::new($connection);
         $this->table = $this->tableLocator->get(EmployeeTable::CLASS);
 
-        $rc = new \ReflectionClass(\Atlas\Query\Bind::CLASS);
+        $rc = new ReflectionClass(Bind::CLASS);
         $rp = $rc->getProperty('instanceCount');
         $rp->setAccessible(true);
         $rp->setValue(0);
