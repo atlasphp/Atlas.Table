@@ -12,6 +12,6 @@ use Atlas\Table\TableSelect;
  * @method CourseRow|null fetchRow()
  * @method CourseRow[] fetchRows()
  */
-class CourseTableSelect_ extends TableSelect
+abstract class CourseTableSelect_ extends TableSelect
 {
 }
