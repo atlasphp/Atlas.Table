@@ -63,7 +63,7 @@ abstract class Table
         return $this->connectionLocator->getWrite();
     }
 
-    public function fetchRow(array|int|string $primaryVal) : ?Row
+    public function fetchRow(mixed $primaryVal) : ?Row
     {
         return $this->selectRow($this->select(), $primaryVal);
     }
@@ -81,7 +81,7 @@ abstract class Table
         return $select;
     }
 
-    public function selectRow(TableSelect $select, array|int|string $primaryVal) : ?Row
+    public function selectRow(TableSelect $select, mixed $primaryVal) : ?Row
     {
         $this->primaryKey->whereRow($select, $primaryVal);
         return $select->fetchRow();
