@@ -72,7 +72,7 @@ class Exception extends \Exception
     }
 
     public static function unexpectedOption(
-        mixed $option,
+        string $option,
         array $options
     ) : Exception
     {

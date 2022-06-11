@@ -255,7 +255,9 @@ abstract class Table
     public function newRow(array $cols = []) : Row
     {
         $rowClass = $this->rowClass;
-        return new $rowClass($cols);
+        /** @var Row */
+        $row = new $rowClass($cols);
+        return $row;
     }
 
     public function newSelectedRow(array $cols) : Row

@@ -17,14 +17,13 @@ abstract class TableSelect extends Select
     /**
      * Returns a new TableSelect object.
      *
-     * @param Connection $connection A read connection.
-     * @param Table $table The table being selected from.
-     * @param array $whereEquals Equality pairs of columns and values.
      * @return static
      */
     static public function new(mixed $arg, mixed ...$args) : static
     {
+        /** @var array */
         $whereEquals = array_pop($args);
+        /** @var Table */
         $table = array_pop($args);
         $select = parent::new($arg, ...$args);
         $select->table = $table;
@@ -57,6 +56,7 @@ abstract class TableSelect extends Select
 
         $rows = [];
         foreach ($this->yieldAll() as $cols) {
+            /** @var array $cols */
             $rows[] = $this->table->newSelectedRow($cols);
         }
 
@@ -71,9 +71,12 @@ abstract class TableSelect extends Select
             ->resetLimit()
             ->columns("COUNT({$column})");
 
-        return (int) $this->table->getReadConnection()->fetchValue(
+        /** @var int|string */
+        $count = $this->table->getReadConnection()->fetchValue(
             $select->getQueryString(),
             $select->getBindValueArrays()
         );
+
+        return (int) $count;
     }
 }

@@ -60,9 +60,12 @@ class TableLocator
 
     protected function newTable(string $tableClass) : Table
     {
-        return new $tableClass(
+        /** @var Table */
+        $table = new $tableClass(
             $this->connectionLocator,
             ($this->factory)($tableClass . 'Events')
         );
+
+        return $table;
     }
 }

@@ -19,7 +19,7 @@ class PrimarySimple
         $this->col = reset($cols);
     }
 
-    public function whereRow(TableSelect $select, mixed $primaryVal) : void
+    public function whereRow(TableSelect $select, int|string $primaryVal) : void
     {
         $qcol = $select->quoteIdentifier($this->col);
         $select->where("{$qcol} = ", $primaryVal);
