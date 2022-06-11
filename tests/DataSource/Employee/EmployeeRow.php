@@ -3,6 +3,6 @@ declare(strict_types=1);
 
 namespace Atlas\Table\DataSource\Employee;
 
-class EmployeeRow extends _\EmployeeRow_
+class EmployeeRow extends _generated\EmployeeRow_
 {
 }

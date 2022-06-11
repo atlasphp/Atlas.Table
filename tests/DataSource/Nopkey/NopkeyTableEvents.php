@@ -3,6 +3,6 @@ declare(strict_types=1);
 
 namespace Atlas\Table\DataSource\Nopkey;
 
-class NopkeyTableEvents extends _\NopkeyTableEvents_
+class NopkeyTableEvents extends _generated\NopkeyTableEvents_
 {
 }

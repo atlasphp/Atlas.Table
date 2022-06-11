@@ -4,7 +4,7 @@
  */
 declare(strict_types=1);
 
-namespace Atlas\Table\DataSource\Course\_;
+namespace Atlas\Table\DataSource\Course\_generated;
 
 use Atlas\Query\Delete;
 use Atlas\Query\Insert;

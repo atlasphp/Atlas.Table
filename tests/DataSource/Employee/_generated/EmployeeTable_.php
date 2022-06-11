@@ -4,7 +4,7 @@
  */
 declare(strict_types=1);
 
-namespace Atlas\Table\DataSource\Employee\_;
+namespace Atlas\Table\DataSource\Employee\_generated;
 
 use Atlas\Table\Table;
 

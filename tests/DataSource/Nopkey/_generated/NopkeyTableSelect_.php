@@ -4,7 +4,7 @@
  */
 declare(strict_types=1);
 
-namespace Atlas\Table\DataSource\Nopkey\_;
+namespace Atlas\Table\DataSource\Nopkey\_generated;
 
 use Atlas\Table\TableSelect;
 

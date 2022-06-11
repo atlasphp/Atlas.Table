@@ -3,6 +3,6 @@ declare(strict_types=1);
 
 namespace Atlas\Table\DataSource\Course;
 
-class CourseTable extends _\CourseTable_
+class CourseTable extends _generated\CourseTable_
 {
 }

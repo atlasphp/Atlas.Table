@@ -3,6 +3,6 @@ declare(strict_types=1);
 
 namespace Atlas\Table\DataSource\Employee;
 
-class EmployeeTableEvents extends _\EmployeeTableEvents_
+class EmployeeTableEvents extends _generated\EmployeeTableEvents_
 {
 }

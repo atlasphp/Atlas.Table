@@ -3,6 +3,6 @@ declare(strict_types=1);
 
 namespace Atlas\Table\DataSource\Nopkey;
 
-class NopkeyRow extends _\NopkeyRow_
+class NopkeyRow extends _generated\NopkeyRow_
 {
 }
