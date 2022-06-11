@@ -127,7 +127,7 @@ abstract class Row implements IteratorAggregate, JsonSerializable
         return $this->getArrayCopy();
     }
 
-    public function setLastAction(?string $lastAction) : void
+    public function setLastAction(string $lastAction) : void
     {
         $options = [
             static::SELECT,
