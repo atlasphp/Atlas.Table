@@ -152,26 +152,24 @@ abstract class Row implements IteratorAggregate, JsonSerializable
 
     public function getNextAction() : ?string
     {
-        $meta = $this->{static::META};
-
-        if ($meta->lastAction === null) {
-            return $meta->delete ? null : static::INSERT;
+        if ($this->{static::META}->lastAction === null) {
+            return $this->{static::META}->delete ? null : static::INSERT;
         }
 
-        if ($meta->delete) {
+        if ($this->{static::META}->delete) {
             return static::DELETE;
         }
 
-        if ($meta->clean) {
+        if ($this->{static::META}->clean) {
             return null;
         }
 
-        foreach ($meta->init as $col => $old) {
+        foreach ($this->{static::META}->init as $col => $old) {
             if ($this->isModified($col, $old)) {
                 return static::UPDATE;
             }
 
-            $meta->clean = true;
+            $this->{static::META}->clean = true;
         }
 
         return null;
