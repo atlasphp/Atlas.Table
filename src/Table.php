@@ -22,29 +22,28 @@ use PDOStatement;
 
 abstract class Table
 {
-    const NAME = '';
+    public const NAME = '';
 
-    const COLUMNS = [];
+    public const COLUMNS = [];
 
-    const COLUMN_NAMES = [];
+    public const COLUMN_NAMES = [];
 
-    const COLUMN_DEFAULTS = [];
+    public const COLUMN_DEFAULTS = [];
 
-    const PRIMARY_KEY = [];
+    public const PRIMARY_KEY = [];
 
-    const COMPOSITE_KEY = false;
+    public const COMPOSITE_KEY = false;
 
-    const AUTOINC_COLUMN = null;
+    public const AUTOINC_COLUMN = null;
 
-    const AUTOINC_SEQUENCE = null;
+    public const AUTOINC_SEQUENCE = null;
 
-    protected string $rowClass;
+    public const ROW_CLASS = '';
 
     public function __construct(
         protected ConnectionLocator $connectionLocator,
         protected TableEvents $tableEvents
     ) {
-        $this->rowClass = substr(static::CLASS, 0, -5) . 'Row';
     }
 
     public function getReadConnection() : Connection
@@ -57,7 +56,7 @@ abstract class Table
         return $this->connectionLocator->getWrite();
     }
 
-    public function fetchRow(array|int|string $primaryVal) : ?Row
+    public function fetchRow(mixed $primaryVal) : ?Row
     {
         return $this->selectRow($this->select(), $primaryVal);
     }
@@ -75,10 +74,10 @@ abstract class Table
         return $select;
     }
 
-    public function selectRow(TableSelect $select, array|int|string $primaryVal) : ?Row
+    public function selectRow(TableSelect $select, mixed $primaryVal) : ?Row
     {
         if (static::COMPOSITE_KEY) {
-            return $this->selectRowComposite($select, (array) $primaryVal);
+            return $this->selectRowComposite($select, $primaryVal);
         }
 
         $qcol = $select->quoteIdentifier(static::PRIMARY_KEY[0]);
@@ -86,8 +85,9 @@ abstract class Table
         return $select->fetchRow();
     }
 
-    protected function selectRowComposite(TableSelect $select, array $primaryVal) : ?Row
+    protected function selectRowComposite(TableSelect $select, mixed $primaryVal) : ?Row
     {
+        $primaryVal = (array) $primaryVal;
         $condition = [];
 
         foreach (static::PRIMARY_KEY as $col) {
@@ -289,7 +289,7 @@ abstract class Table
 
     public function newRow(array $cols = []) : Row
     {
-        $rowClass = $this->rowClass;
+        $rowClass = static::ROW_CLASS;
         /** @var Row */
         $row = new $rowClass($cols);
         return $row;

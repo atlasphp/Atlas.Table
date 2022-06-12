@@ -7,6 +7,8 @@ declare(strict_types=1);
 namespace Atlas\Table\DataSource\Nopkey\_generated;
 
 use Atlas\Table\Table;
+use Atlas\Table\DataSource\Nopkey\NopkeyRow;
+use Atlas\Table\DataSource\Nopkey\NopkeyTableSelect;
 
 /**
  * @method NopkeyRow|null fetchRow($primaryVal)
@@ -17,11 +19,11 @@ use Atlas\Table\Table;
  */
 abstract class NopkeyTable_ extends Table
 {
-    const DRIVER = 'sqlite';
+    public const DRIVER = 'sqlite';
 
-    const NAME = 'nopkeys';
+    public const NAME = 'nopkeys';
 
-    const COLUMNS = [
+    public const COLUMNS = [
         'name' => [
             'name' => 'name',
             'type' => 'VARCHAR',
@@ -46,22 +48,24 @@ abstract class NopkeyTable_ extends Table
         ],
     ];
 
-    const COLUMN_NAMES = [
+    public const COLUMN_NAMES = [
         'name',
         'email',
     ];
 
-    const COLUMN_DEFAULTS = [
+    public const COLUMN_DEFAULTS = [
         'name' => null,
         'email' => null,
     ];
 
-    const PRIMARY_KEY = [
+    public const PRIMARY_KEY = [
     ];
 
     public const COMPOSITE_KEY = false;
 
-    const AUTOINC_COLUMN = null;
+    public const AUTOINC_COLUMN = null;
 
-    const AUTOINC_SEQUENCE = null;
+    public const AUTOINC_SEQUENCE = null;
+
+    public const ROW_CLASS = NopkeyRow::CLASS;
 }

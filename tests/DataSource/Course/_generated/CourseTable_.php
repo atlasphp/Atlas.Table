@@ -7,6 +7,8 @@ declare(strict_types=1);
 namespace Atlas\Table\DataSource\Course\_generated;
 
 use Atlas\Table\Table;
+use Atlas\Table\DataSource\Course\CourseRow;
+use Atlas\Table\DataSource\Course\CourseTableSelect;
 
 /**
  * @method CourseRow|null fetchRow($primaryVal)
@@ -79,4 +81,6 @@ abstract class CourseTable_ extends Table
     public const AUTOINC_COLUMN = null;
 
     public const AUTOINC_SEQUENCE = null;
+
+    public const ROW_CLASS = CourseRow::CLASS;
 }

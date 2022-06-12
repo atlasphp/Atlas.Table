@@ -7,6 +7,8 @@ declare(strict_types=1);
 namespace Atlas\Table\DataSource\Employee\_generated;
 
 use Atlas\Table\Table;
+use Atlas\Table\DataSource\Employee\EmployeeRow;
+use Atlas\Table\DataSource\Employee\EmployeeTableSelect;
 
 /**
  * @method EmployeeRow|null fetchRow($primaryVal)
@@ -91,4 +93,6 @@ abstract class EmployeeTable_ extends Table
     public const AUTOINC_COLUMN = 'id';
 
     public const AUTOINC_SEQUENCE = null;
+
+    public const ROW_CLASS = EmployeeRow::CLASS;
 }
