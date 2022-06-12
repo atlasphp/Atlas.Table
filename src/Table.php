@@ -32,25 +32,19 @@ abstract class Table
 
     const PRIMARY_KEY = [];
 
+    const COMPOSITE_KEY = false;
+
     const AUTOINC_COLUMN = null;
 
     const AUTOINC_SEQUENCE = null;
 
     protected string $rowClass;
 
-    protected PrimarySimple|PrimaryComposite $primaryKey;
-
     public function __construct(
         protected ConnectionLocator $connectionLocator,
         protected TableEvents $tableEvents
     ) {
         $this->rowClass = substr(static::CLASS, 0, -5) . 'Row';
-
-        if (count($this::PRIMARY_KEY) == 1) {
-            $this->primaryKey = new PrimarySimple($this::PRIMARY_KEY);
-        } else {
-            $this->primaryKey = new PrimaryComposite($this::PRIMARY_KEY);
-        }
     }
 
     public function getReadConnection() : Connection
@@ -63,7 +57,7 @@ abstract class Table
         return $this->connectionLocator->getWrite();
     }
 
-    public function fetchRow(mixed $primaryVal) : ?Row
+    public function fetchRow(array|int|string $primaryVal) : ?Row
     {
         return $this->selectRow($this->select(), $primaryVal);
     }
@@ -81,15 +75,56 @@ abstract class Table
         return $select;
     }
 
-    public function selectRow(TableSelect $select, mixed $primaryVal) : ?Row
+    public function selectRow(TableSelect $select, array|int|string $primaryVal) : ?Row
     {
-        $this->primaryKey->whereRow($select, $primaryVal);
+        if (static::COMPOSITE_KEY) {
+            return $this->selectRowComposite($select, (array) $primaryVal);
+        }
+
+        $qcol = $select->quoteIdentifier(static::PRIMARY_KEY[0]);
+        $select->where("{$qcol} = ", $primaryVal);
+        return $select->fetchRow();
+    }
+
+    protected function selectRowComposite(TableSelect $select, array $primaryVal) : ?Row
+    {
+        $condition = [];
+
+        foreach (static::PRIMARY_KEY as $col) {
+            $this->assertCompositePart($primaryVal, $col);
+            $qcol = $select->quoteIdentifier($col);
+            $condition[] = "{$qcol} = " . $select->bindInline($primaryVal[$col]);
+        }
+
+        $select->where(implode(' AND ', $condition));
         return $select->fetchRow();
     }
 
     public function selectRows(TableSelect $select, array $primaryVals) : array
     {
-        $this->primaryKey->whereRows($select, $primaryVals);
+        if (static::COMPOSITE_KEY) {
+            return $this->selectRowsComposite($select, $primaryVals);
+        }
+
+        $qcol = $select->quoteIdentifier(static::PRIMARY_KEY[0]);
+        $select->where("{$qcol} IN ", $primaryVals);
+        return $select->fetchRows();
+    }
+
+    protected function selectRowsComposite(TableSelect $select, array $primaryVals) : array
+    {
+        foreach ($primaryVals as $primaryVal) {
+            $condition = [];
+
+            foreach (static::PRIMARY_KEY as $col) {
+                $this->assertCompositePart($primaryVal, $col);
+                $qcol = $select->quoteIdentifier($col);
+                $condition[] = "{$qcol} = " . $select->bindInline($primaryVal[$col]);
+            }
+
+            $select->orWhere('(' . implode(' AND ', $condition) . ')');
+        }
+
         return $select->fetchRows();
     }
 
@@ -266,5 +301,16 @@ abstract class Table
         $this->tableEvents->modifySelectedRow($this, $row);
         $row->setLastAction($row::SELECT);
         return $row;
+    }
+
+    protected function assertCompositePart(array $primaryVal, string $col) : void
+    {
+        if (! isset($primaryVal[$col])) {
+            throw Exception::primaryValueMissing($col);
+        }
+
+        if (! is_scalar($primaryVal[$col])) {
+            throw Exception::primaryValueNotScalar($col, $primaryVal[$col]);
+        }
     }
 }

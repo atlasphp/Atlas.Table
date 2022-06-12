@@ -59,6 +59,8 @@ abstract class NopkeyTable_ extends Table
     const PRIMARY_KEY = [
     ];
 
+    public const COMPOSITE_KEY = false;
+
     const AUTOINC_COLUMN = null;
 
     const AUTOINC_SEQUENCE = null;

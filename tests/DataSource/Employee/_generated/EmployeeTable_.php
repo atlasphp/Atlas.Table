@@ -86,6 +86,8 @@ abstract class EmployeeTable_ extends Table
         'id',
     ];
 
+    public const COMPOSITE_KEY = false;
+
     public const AUTOINC_COLUMN = 'id';
 
     public const AUTOINC_SEQUENCE = null;

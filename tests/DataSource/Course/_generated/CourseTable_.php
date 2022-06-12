@@ -74,6 +74,8 @@ abstract class CourseTable_ extends Table
         'course_number',
     ];
 
+    public const COMPOSITE_KEY = true;
+
     public const AUTOINC_COLUMN = null;
 
     public const AUTOINC_SEQUENCE = null;
