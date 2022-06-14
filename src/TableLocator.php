@@ -23,9 +23,12 @@ class TableLocator
 
     protected array $instances = [];
 
+    /**
+     * @param callable $factory
+     */
     public function __construct(
         protected ConnectionLocator $connectionLocator,
-        protected mixed /* callable */ $factory = null
+        protected mixed $factory = null
     ) {
         if ($this->factory === null) {
             $this->factory = function (string $class) : object {

@@ -6,4 +6,3 @@ parameters:
     ignoreErrors:
         - "#Unsafe usage of new static#"
         - "#no value type specified in iterable type#"
-        - "#Trying to invoke mixed but it's not a callable#"
