@@ -80,4 +80,10 @@ class Exception extends \Exception
             . "'; got '{$option}' instead.";
         return new Exception($message);
     }
+
+    public static function rowAlreadyIdentityMapped(Row $row, string $serial) : self
+    {
+        $class = get_class($row);
+        return new Exception("{$class} with serial {$serial} already exists in IdentityMap.");
+    }
 }
