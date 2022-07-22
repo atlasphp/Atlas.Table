@@ -10,16 +10,6 @@ declare(strict_types=1);
 
 namespace Atlas\Table;
 
-use Atlas\Table\Exception;
-use Atlas\Table\IdentityMap\CompositeIdentityMap;
-use Atlas\Table\IdentityMap\SimpleIdentityMap;
-use Atlas\Table\Row;
-use Atlas\Table\Table;
-use Atlas\Table\TableSelect;
-
-/**
- * @todo add $table::ROW_CLASS type checks
- */
 abstract class IdentityMap
 {
     protected array $memory = [];
@@ -124,6 +114,18 @@ abstract class IdentityMap
     protected function getRowBySerial(string $serial) : ?Row
     {
         return $this->memory[$serial] ?? null;
+    }
+
+    protected function assertRow(Row $row) : void
+    {
+        $expect = $this->table::ROW_CLASS;
+        if (! $row instanceof $expect) {
+            throw Exception::typeError(
+                'identity map row',
+                $expect,
+                get_class($row)
+            );
+        }
     }
 
     abstract protected function getSerialArray(mixed $spec) : array;

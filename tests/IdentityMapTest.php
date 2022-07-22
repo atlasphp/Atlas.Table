@@ -10,9 +10,6 @@ use Atlas\Table\DataSource\Nopkey\NopkeyRow;
 use Atlas\Table\DataSource\Nopkey\NopkeyTable;
 use Atlas\Table\Exception;
 
-/**
- * make abstract, extend with SimpleIdentityMapTest and CompositeIdentityMapTest
- */
 abstract class IdentityMapTest extends \PHPUnit\Framework\TestCase
 {
     protected const TABLE_CLASS = null;
@@ -34,10 +31,9 @@ abstract class IdentityMapTest extends \PHPUnit\Framework\TestCase
         $connection = (new DataSourceFixture())->exec();
         $this->tableLocator = TableLocator::new($connection);
         $this->table = $this->tableLocator->get(static::TABLE_CLASS);
-        $this->identityMap = $this->newIdentityMap();
+        $identityMapClass = substr(get_class($this), 0, -4);
+        $this->identityMap = new $identityMapClass($this->table);
     }
-
-    abstract protected function newIdentityMap();
 
     public function testSetRow()
     {
@@ -93,6 +89,14 @@ abstract class IdentityMapTest extends \PHPUnit\Framework\TestCase
         // $this->assertSame('4', $more[3]->id);
         $this->assertSame($rows[0], $more[0]); // id 1 should be memorized
         $this->assertSame($rows[1], $more[2]); // id 3 should be memorized
+    }
+
+    public function testGetSerial_typeError()
+    {
+        $expect = $this->table::ROW_CLASS;
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Expected identity map row of type {$expect}, got Atlas\Table\Row@anonymous");
+        $this->identityMap->getSerial(new class extends Row {});
     }
 
     abstract public function testGetSerial_arrayPrimaryValNotScalar();

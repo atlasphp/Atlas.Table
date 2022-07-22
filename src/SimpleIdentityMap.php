@@ -8,11 +8,7 @@
  */
 declare(strict_types=1);
 
-namespace Atlas\Table\IdentityMap;
-
-use Atlas\Table\Exception;
-use Atlas\Table\IdentityMap;
-use Atlas\Table\Row;
+namespace Atlas\Table;
 
 class SimpleIdentityMap extends IdentityMap
 {
@@ -32,6 +28,7 @@ class SimpleIdentityMap extends IdentityMap
 
     protected function getSerialArrayFromRow(Row $row) : array
     {
+        $this->assertRow($row);
         $col = $this->table::PRIMARY_KEY[0];
         $serial = [
             $col => $row->{$col},

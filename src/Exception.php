@@ -86,4 +86,9 @@ class Exception extends \Exception
         $class = get_class($row);
         return new Exception("{$class} with serial {$serial} already exists in IdentityMap.");
     }
+
+    public static function typeError(string $label, string $expect, string $actual)
+    {
+        return new Exception("Expected {$label} of type {$expect}, got {$actual} instead.");
+    }
 }

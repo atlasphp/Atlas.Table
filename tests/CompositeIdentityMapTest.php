@@ -1,8 +1,6 @@
 <?php
-namespace Atlas\Table\IdentityMap;
+namespace Atlas\Table;
 
-use Atlas\Table\Exception;
-use Atlas\Table\IdentityMapTest;
 use Atlas\Table\DataSource\Course\CourseTable;
 
 class CompositeIdentityMapTest extends IdentityMapTest
@@ -47,11 +45,6 @@ class CompositeIdentityMapTest extends IdentityMapTest
             'course_number' => 999,
         ],
     ];
-
-    protected function newIdentityMap()
-    {
-        return new CompositeIdentityMap($this->table);
-    }
 
     public function testGetSerial_arrayPrimaryValNotScalar()
     {

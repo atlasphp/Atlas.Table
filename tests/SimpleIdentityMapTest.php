@@ -1,9 +1,7 @@
 <?php
-namespace Atlas\Table\IdentityMap;
+namespace Atlas\Table;
 
 use Atlas\Table\DataSource\Employee\EmployeeTable;
-use Atlas\Table\Exception;
-use Atlas\Table\IdentityMapTest;
 
 class SimpleIdentityMapTest extends IdentityMapTest
 {
@@ -14,11 +12,6 @@ class SimpleIdentityMapTest extends IdentityMapTest
     protected const PRIMARY_VALS = [1, 3];
 
     protected const PRIMARY_VALS_MORE = [1, 2, 3, 4, 9999];
-
-    protected function newIdentityMap()
-    {
-        return new SimpleIdentityMap($this->table);
-    }
 
     public function testGetSerial_arrayPrimaryValNotScalar()
     {
