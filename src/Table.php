@@ -166,7 +166,7 @@ abstract class Table
 
         $rowCount = $pdoStatement->rowCount();
         if ($rowCount != 1) {
-            throw Exception::unexpectedRowCountAffected($rowCount);
+            throw new Exception\UnexpectedRowCountAffected($rowCount);
         }
 
         $autoinc = static::AUTOINC_COLUMN;
@@ -202,15 +202,22 @@ abstract class Table
         }
 
         $update = $this->update();
+        $init = $row->getArrayInit();
+
         foreach (static::PRIMARY_KEY as $primaryCol) {
             if (array_key_exists($primaryCol, $diff)) {
-                throw Exception::primaryValueChanged($primaryCol);
+                throw new Exception\PrimaryValueChanged(
+                    $primaryCol,
+                    $init[$primaryCol],
+                    $row->$primaryCol
+                );
             }
+
             $update->where("{$primaryCol} = ", $row->$primaryCol);
             unset($diff[$primaryCol]);
         }
-        $update->columns($diff);
 
+        $update->columns($diff);
         $this->tableEvents->modifyUpdateRow($this, $row, $update);
         return $update;
     }
@@ -222,14 +229,14 @@ abstract class Table
         }
 
         if (empty(static::PRIMARY_KEY)) {
-            throw Exception::cannotPerformWithoutPrimaryKey('update row', static::NAME);
+            throw new Exception\CannotPerformWithoutPrimaryKey('update row', static::NAME);
         }
 
         $pdoStatement = $update->perform();
 
         $rowCount = $pdoStatement->rowCount();
         if ($rowCount != 1) {
-            throw Exception::unexpectedRowCountAffected($rowCount);
+            throw new Exception\UnexpectedRowCountAffected($rowCount);
         }
 
         $this->tableEvents->afterUpdateRow($this, $row, $update, $pdoStatement);
@@ -272,14 +279,14 @@ abstract class Table
         }
 
         if (empty(static::PRIMARY_KEY)) {
-            throw Exception::cannotPerformWithoutPrimaryKey('delete row', static::NAME);
+            throw new Exception\CannotPerformWithoutPrimaryKey('delete row', static::NAME);
         }
 
         $pdoStatement = $delete->perform();
 
         $rowCount = $pdoStatement->rowCount();
         if ($rowCount != 1) {
-            throw Exception::unexpectedRowCountAffected($rowCount);
+            throw new Exception\UnexpectedRowCountAffected($rowCount);
         }
 
         $this->tableEvents->afterDeleteRow($this, $row, $delete, $pdoStatement);
@@ -306,11 +313,11 @@ abstract class Table
     protected function assertCompositePart(array $primaryVal, string $col) : void
     {
         if (! isset($primaryVal[$col])) {
-            throw Exception::primaryValueMissing($col);
+            throw new Exception\PrimaryValueMissing($col);
         }
 
         if (! is_scalar($primaryVal[$col])) {
-            throw Exception::primaryValueNotScalar($col, $primaryVal[$col]);
+            throw new Exception\PrimaryValueNotScalar($col, $primaryVal[$col]);
         }
     }
 }

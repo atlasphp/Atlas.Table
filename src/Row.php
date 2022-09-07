@@ -53,7 +53,7 @@ abstract class Row implements IteratorAggregate, JsonSerializable
         }
 
         if ($this->{static::META}->lastAction == self::DELETE) {
-            throw Exception::immutableOnceDeleted(static::CLASS, $col);
+            throw new Exception\ImmutableAfterDeleted(static::CLASS, $col);
         }
 
         $this->assertHas($col);
@@ -70,7 +70,7 @@ abstract class Row implements IteratorAggregate, JsonSerializable
     public function __unset(string $col) : void
     {
         if ($this->{static::META}->lastAction == self::DELETE) {
-            throw Exception::immutableOnceDeleted(static::CLASS, $col);
+            throw new Exception\ImmutableAfterDeleted(static::CLASS, $col);
         }
 
         $this->assertHas($col);
@@ -137,7 +137,7 @@ abstract class Row implements IteratorAggregate, JsonSerializable
         ];
 
         if (! in_array($lastAction, $options)) {
-            throw Exception::unexpectedOption($lastAction, $options);
+            throw new Exception\UnexpectedOption($lastAction, $options);
         }
 
         $this->{static::META}->lastAction = $lastAction;
@@ -183,7 +183,7 @@ abstract class Row implements IteratorAggregate, JsonSerializable
     protected function assertHas(string $col) : void
     {
         if (! $this->has($col)) {
-            throw Exception::propertyDoesNotExist(static::CLASS, $col);
+            throw new Exception\PropertyDoesNotExist(static::CLASS, $col);
         }
     }
 

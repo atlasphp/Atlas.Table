@@ -82,7 +82,7 @@ abstract class IdentityMap
         $serial = $this->getSerial($row);
 
         if (isset($this->memory[$serial])) {
-            throw Exception::rowAlreadyIdentityMapped($row, $serial);
+            throw new Exception\RowAlreadyIdentityMapped($row, $serial);
         }
 
         $this->memory[$serial] = $row;
@@ -120,7 +120,7 @@ abstract class IdentityMap
     {
         $expect = $this->table::ROW_CLASS;
         if (! $row instanceof $expect) {
-            throw Exception::typeError(
+            throw new Exception\UnexpectedType(
                 'identity map row',
                 $expect,
                 get_class($row)

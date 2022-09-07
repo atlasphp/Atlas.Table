@@ -21,7 +21,7 @@ class CompositeIdentityMap extends IdentityMap
             $serial[$col] = $primaryVal[$col] ?? null;
 
             if (! is_scalar($serial[$col])) {
-                throw Exception::primaryValueNotScalar($col, $serial[$col]);
+                throw new Exception\PrimaryValueNotScalar($col, $serial[$col]);
             }
         }
 
@@ -37,7 +37,7 @@ class CompositeIdentityMap extends IdentityMap
             $serial[$col] = $row->$col ?? null;
 
             if (! is_scalar($serial[$col])) {
-                throw Exception::primaryValueNotScalar($col, $serial[$col]);
+                throw new Exception\PrimaryValueNotScalar($col, $serial[$col]);
             }
         }
 

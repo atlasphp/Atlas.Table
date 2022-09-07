@@ -29,9 +29,7 @@ class TableLocatorTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($actual, $again);
 
         $this->expectException(Exception::CLASS);
-        $this->expectExceptionMessage(
-            'Foo not found in table locator.'
-        );
+        $this->expectExceptionMessage("Class 'Foo' does not exist.");
         $this->tableLocator->get('Foo');
     }
 

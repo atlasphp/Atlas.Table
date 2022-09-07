@@ -53,7 +53,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $row->id = 2;
         $this->expectException(Exception::CLASS);
         $this->expectExceptionMessage(
-            "Primary key value for 'id' changed"
+            "Primary key value for 'id' changed from '1' to 2"
         );
         $this->table->updateRow($row);
     }

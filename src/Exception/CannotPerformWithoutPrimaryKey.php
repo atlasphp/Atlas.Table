@@ -1,0 +1,22 @@
+<?php
+/**
+ *
+ * This file is part of Atlas for PHP.
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ *
+ */
+declare(strict_types=1);
+
+namespace Atlas\Table\Exception;
+
+use Atlas\Table\Exception;
+
+class CannotPerformWithoutPrimaryKey extends Exception
+{
+    public function __construct(string $operation, string $table)
+    {
+        $message = "Cannot {$operation} on table '$table' without primary key.";
+        parent::__construct($message);
+    }
+}

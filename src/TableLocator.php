@@ -46,7 +46,7 @@ class TableLocator
     public function get(string $tableClass) : Table
     {
         if (! $this->has($tableClass)) {
-            throw Exception::tableNotFound($tableClass);
+            throw new Exception\ClassDoesNotExist($tableClass);
         }
 
         if (! isset($this->instances[$tableClass])) {

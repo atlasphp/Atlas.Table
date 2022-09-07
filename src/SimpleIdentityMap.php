@@ -20,7 +20,7 @@ class SimpleIdentityMap extends IdentityMap
         ];
 
         if (! is_scalar($serial[$col])) {
-            throw Exception::primaryValueNotScalar($col, $serial[$col]);
+            throw new Exception\PrimaryValueNotScalar($col, $serial[$col]);
         }
 
         return $serial;
@@ -35,7 +35,7 @@ class SimpleIdentityMap extends IdentityMap
         ];
 
         if (! is_scalar($serial[$col])) {
-            throw Exception::primaryValueNotScalar($col, $serial[$col]);
+            throw new Exception\PrimaryValueNotScalar($col, $serial[$col]);
         }
 
         return $serial;
