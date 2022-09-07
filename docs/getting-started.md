@@ -3,28 +3,27 @@
 ## Installation
 
 This package is installable and autoloadable via [Composer](https://getcomposer.org/)
-as [atlas/table](https://packagist.org/packages/atlas/table). Add the following lines
-to your `composer.json` file, then call `composer update`.
+as [atlas/table](https://packagist.org/packages/atlas/table).
 
-```json
-{
-    "require": {
-        "atlas/table": "~1.0"
-    }
-}
+To install it, issue the following command at the command line:
+
+```
+composer require atlas/table:^2.0
 ```
 
-## Upgrading
+### Generating Classes
+
+Before using Atlas.Table for the first time, you will need to create the
+prerequsite data-source classes using the [`atlas-skeleton`](/dymaxion/skeleton)
+command.
+
+### Upgrading Generated Classes
 
 To upgrade from the prior version of Atlas.Table, you only need to re-run the
 [`atlas-skeleton-upgrade`](/dymaxion/skeleton) command with your existing
 configuration.
 
 ## Instantiation
-
-Before using Atlas.Table for the first time, you will need to create the
-prerequsite data-source classes using the [`atlas-skeleton`](/dymaxion/skeleton)
-command.
 
 Once you have your data source classes in place, create a _TableLocator_ using
 the static `new()` method and pass in an Atlas.Pdo _Connection_:
