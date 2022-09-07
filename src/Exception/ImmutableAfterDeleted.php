@@ -17,6 +17,6 @@ class ImmutableAfterDeleted extends Exception
     public function __construct(string $class, string $property)
     {
         $classProp = "{$class}::\${$property}";
-        return new Exception("{$classProp} is immutable after Row is deleted.");
+        parent::__construct("{$classProp} is immutable after Row is deleted.");
     }
 }

@@ -18,8 +18,11 @@ use Traversable;
 abstract class Row implements IteratorAggregate, JsonSerializable
 {
     public const SELECT = 'SELECT';
+
     public const INSERT = 'INSERT';
+
     public const UPDATE = 'UPDATE';
+
     public const DELETE = 'DELETE';
 
     protected const META = '\0META';
@@ -29,7 +32,7 @@ abstract class Row implements IteratorAggregate, JsonSerializable
         $this->set($cols);
 
         // clever, terrible hack to disguise the meta property so it does not
-        // conflict with legitimate column properties. if have a table column
+        // conflict with legitimate column properties. if you have a column
         // named "\0META" you get what you deserve.
         $this->{static::META} = (object) [
             'init' => $this->getArrayCopy(),
@@ -189,9 +192,15 @@ abstract class Row implements IteratorAggregate, JsonSerializable
 
     protected function isModified(string $col, mixed $old) : bool
     {
-        $old = is_bool($old) ? (int) $old : $old;
+        $old = is_bool($old)
+            ? (int) $old
+            : $old;
+
         $new = $this->$col;
-        $new = is_bool($new) ? (int) $new : $new;
+
+        $new = is_bool($new)
+            ? (int) $new
+            : $new;
 
         return (is_numeric($old) && is_numeric($new))
             ? $old != $new // numeric, compare loosely

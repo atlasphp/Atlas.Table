@@ -14,10 +14,17 @@ to your `composer.json` file, then call `composer update`.
 }
 ```
 
+## Upgrading
+
+To upgrade from the prior version of Atlas.Table, you only need to re-run the
+[`atlas-skeleton-upgrade`](/dymaxion/skeleton) command with your existing
+configuration.
+
 ## Instantiation
 
-Before using Atlas.Table, you will need to create the prerequsite data-source
-classes using the [skeleton generator](/dymaxion/skeleton).
+Before using Atlas.Table for the first time, you will need to create the
+prerequsite data-source classes using the [`atlas-skeleton`](/dymaxion/skeleton)
+command.
 
 Once you have your data source classes in place, create a _TableLocator_ using
 the static `new()` method and pass in an Atlas.Pdo _Connection_:
