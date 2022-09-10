@@ -55,7 +55,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $row->id = 2;
         $this->expectException(Exception::CLASS);
         $this->expectExceptionMessage(
-            "Primary key value for 'id' changed from '1' to 2"
+            "Primary key value for 'id' changed"
         );
         $this->table->updateRow($row);
     }
@@ -72,7 +72,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $this->logQueries();
         $row = $this->table->fetchRow(1);
         $this->assertInstanceOf(EmployeeRow::CLASS, $row);
-        $this->assertSame($expect, $row->getArrayCopy());
+        $this->assertEquals($expect, $row->getArrayCopy());
 
         // check quoting
         $queries = $this->getQueries();
@@ -109,7 +109,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
             'course_number' => '100'
         ]);
 
-        $this->assertSame($expect, $actual->getArrayCopy());
+        $this->assertEquals($expect, $actual->getArrayCopy());
 
         // check quoting
         $queries = $this->getQueries();
@@ -182,9 +182,9 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(EmployeeRow::CLASS, $actual[0]);
         $this->assertInstanceOf(EmployeeRow::CLASS, $actual[1]);
         $this->assertInstanceOf(EmployeeRow::CLASS, $actual[2]);
-        $this->assertSame($expect[0], $actual[0]->getArrayCopy());
-        $this->assertSame($expect[1], $actual[1]->getArrayCopy());
-        $this->assertSame($expect[2], $actual[2]->getArrayCopy());
+        $this->assertEquals($expect[0], $actual[0]->getArrayCopy());
+        $this->assertEquals($expect[1], $actual[1]->getArrayCopy());
+        $this->assertEquals($expect[2], $actual[2]->getArrayCopy());
 
         // check quoting
         $queries = $this->getQueries();
@@ -201,7 +201,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
 
         // fetch failure
         $actual = $this->table->fetchRows([997, 998, 999]);
-        $this->assertSame([], $actual);
+        $this->assertEquals([], $actual);
     }
 
     public function testFetchRows_compositeKey()
@@ -232,9 +232,9 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(CourseRow::CLASS, $actual[0]);
         $this->assertInstanceOf(CourseRow::CLASS, $actual[1]);
         $this->assertInstanceOf(CourseRow::CLASS, $actual[2]);
-        $this->assertSame($expect[0], $actual[0]->getArrayCopy());
-        $this->assertSame($expect[1], $actual[1]->getArrayCopy());
-        $this->assertSame($expect[2], $actual[2]->getArrayCopy());
+        $this->assertEquals($expect[0], $actual[0]->getArrayCopy());
+        $this->assertEquals($expect[1], $actual[1]->getArrayCopy());
+        $this->assertEquals($expect[2], $actual[2]->getArrayCopy());
 
         // check quoting
         $queries = $this->getQueries();
@@ -295,7 +295,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $actual = $this->table->getReadConnection()->fetchOne(
             'SELECT * FROM employee WHERE id = 13'
         );
-        $this->assertSame($expect, $actual);
+        $this->assertEquals($expect, $actual);
 
         // try to insert again, should fail on unique name
         $this->silenceErrors();
@@ -334,7 +334,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $actual = $this->table->getReadConnection()->fetchOne(
             "SELECT * FROM employee WHERE id = 1"
         );
-        $this->assertSame($expect, $actual);
+        $this->assertEquals($expect, $actual);
 
         // try to update again, should be a no-op because there are no changes
         $this->assertNull($this->table->updateRow($row));

@@ -31,7 +31,7 @@ class TableSelectTest extends \PHPUnit\Framework\TestCase
         // success
         $actual = $this->select->where('id = ', '1')->fetchRow();
         $this->assertInstanceOf(EmployeeRow::CLASS, $actual);
-        $this->assertSame($expect, $actual->getArrayCopy());
+        $this->assertEquals($expect, $actual->getArrayCopy());
 
         // failure
         $actual = $this->select->where('id = ', '-1')->fetchRow();
@@ -64,13 +64,13 @@ class TableSelectTest extends \PHPUnit\Framework\TestCase
         // success
         $actual = $this->select->where('id IN ', [1, 2, 3])->fetchRows();
         $this->assertCount(3, $actual);
-        $this->assertSame($expect[0], $actual[0]->getArrayCopy());
-        $this->assertSame($expect[1], $actual[1]->getArrayCopy());
-        $this->assertSame($expect[2], $actual[2]->getArrayCopy());
+        $this->assertEquals($expect[0], $actual[0]->getArrayCopy());
+        $this->assertEquals($expect[1], $actual[1]->getArrayCopy());
+        $this->assertEquals($expect[2], $actual[2]->getArrayCopy());
 
         // failure
         $actual = $this->select->where('id IN ', [997, 998, 999])->fetchRows();
-        $this->assertSame([], $actual);
+        $this->assertEquals([], $actual);
     }
 
     public function testFetchCount()
@@ -79,6 +79,6 @@ class TableSelectTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(6, $actual);
 
         $actual = $this->select->fetchCount();
-        $this->assertSame(12, $actual);
+        $this->assertEquals(12, $actual);
     }
 }
