@@ -43,7 +43,7 @@ $threadRows = $threadTable
 
 ## Query Construction
 
-The `Table::select()` method returns a query object that you access to all the
+The `Table::select()` method returns a query object that gives access to all the
 underlying SQL query methods. See the [query system](/dymaxion/query)
 documentation for more information.
 
