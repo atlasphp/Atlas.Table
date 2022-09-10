@@ -1,7 +1,7 @@
 <?php
 namespace Atlas\Table;
 
-use Atlas\Table\DataSource\Course\CourseTable;
+use Atlas\Testing\CompositeDataSource\Course\CourseTable;
 
 class CompositeIdentityMapTest extends IdentityMapTest
 {

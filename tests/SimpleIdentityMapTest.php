@@ -1,7 +1,7 @@
 <?php
 namespace Atlas\Table;
 
-use Atlas\Table\DataSource\Employee\EmployeeTable;
+use Atlas\Testing\DataSource\Employee\EmployeeTable;
 
 class SimpleIdentityMapTest extends IdentityMapTest
 {

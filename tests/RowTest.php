@@ -2,7 +2,7 @@
 namespace Atlas\Table;
 
 use Atlas\Table\Exception;
-use Atlas\Table\DataSource\Employee\EmployeeRow;
+use Atlas\Testing\DataSource\Employee\EmployeeRow;
 
 class RowTest extends \PHPUnit\Framework\TestCase
 {

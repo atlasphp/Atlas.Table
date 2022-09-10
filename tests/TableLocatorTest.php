@@ -2,9 +2,9 @@
 namespace Atlas\Table;
 
 use Atlas\Pdo\ConnectionLocator;
-use Atlas\Table\DataSource\DataSourceFixture;
-use Atlas\Table\DataSource\Employee\EmployeeTable;
-use Atlas\Table\DataSource\Employee\EmployeeTableEvents;
+use Atlas\Testing\DataSourceFixture;
+use Atlas\Testing\DataSource\Employee\EmployeeTable;
+use Atlas\Testing\DataSource\Employee\EmployeeTableEvents;
 
 class TableLocatorTest extends \PHPUnit\Framework\TestCase
 {

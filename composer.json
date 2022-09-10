@@ -21,6 +21,7 @@
         }
     },
     "require-dev": {
+        "atlas/testing": "dev-2.x-wip",
         "pds/skeleton": "^1.0",
         "phpunit/phpunit": "^9.0",
         "phpstan/phpstan": "^1.0"

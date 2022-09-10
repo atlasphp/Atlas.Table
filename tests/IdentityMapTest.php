@@ -1,14 +1,15 @@
 <?php
 namespace Atlas\Table;
 
-use Atlas\Table\DataSource\Course\CourseRow;
-use Atlas\Table\DataSource\Course\CourseTable;
-use Atlas\Table\DataSource\DataSourceFixture;
-use Atlas\Table\DataSource\Employee\EmployeeRow;
-use Atlas\Table\DataSource\Employee\EmployeeTable;
-use Atlas\Table\DataSource\Nopkey\NopkeyRow;
-use Atlas\Table\DataSource\Nopkey\NopkeyTable;
 use Atlas\Table\Exception;
+use Atlas\Testing\CompositeDataSourceFixture;
+use Atlas\Testing\DataSource\Course\CourseRow;
+use Atlas\Testing\DataSource\Course\CourseTable;
+use Atlas\Testing\DataSource\Employee\EmployeeRow;
+use Atlas\Testing\DataSource\Employee\EmployeeTable;
+use Atlas\Testing\DataSource\Nopkey\NopkeyRow;
+use Atlas\Testing\DataSource\Nopkey\NopkeyTable;
+use Atlas\Testing\DataSourceFixture;
 
 abstract class IdentityMapTest extends \PHPUnit\Framework\TestCase
 {
@@ -29,6 +30,7 @@ abstract class IdentityMapTest extends \PHPUnit\Framework\TestCase
     protected function setUp() : void
     {
         $connection = (new DataSourceFixture())->exec();
+        (new CompositeDataSourceFixture($connection))->exec();
         $this->tableLocator = TableLocator::new($connection);
         $this->table = $this->tableLocator->get(static::TABLE_CLASS);
         $identityMapClass = substr(get_class($this), 0, -4);
