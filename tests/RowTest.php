@@ -15,14 +15,14 @@ class RowTest extends \PHPUnit\Framework\TestCase
     public function testGetMissingCol()
     {
         $row = new EmployeeRow();
-        $this->expectException(Exception::CLASS);
+        $this->expectException(Exception\PropertyDoesNotExist::CLASS);
         $row->no_such_col;
     }
 
     public function testSetMissingCol()
     {
         $row = new EmployeeRow();
-        $this->expectException(Exception::CLASS);
+        $this->expectException(Exception\PropertyDoesNotExist::CLASS);
         $row->no_such_col = 'name';
     }
 
@@ -30,7 +30,7 @@ class RowTest extends \PHPUnit\Framework\TestCase
     {
         $row = new EmployeeRow();
         $row->setLastAction($row::DELETE);
-        $this->expectException(Exception::CLASS);
+        $this->expectException(Exception\ImmutableAfterDeleted::CLASS);
         $row->id = 'foo';
     }
 
@@ -54,14 +54,14 @@ class RowTest extends \PHPUnit\Framework\TestCase
     {
         $row = new EmployeeRow();
         $row->setLastAction($row::DELETE);
-        $this->expectException(Exception::CLASS);
+        $this->expectException(Exception\ImmutableAfterDeleted::CLASS);
         unset($row->name);
     }
 
     public function testUnsetMissingCol()
     {
         $row = new EmployeeRow();
-        $this->expectException(Exception::CLASS);
+        $this->expectException(Exception\PropertyDoesNotExist::CLASS);
         unset($row->no_such_col);
     }
 
@@ -112,11 +112,11 @@ class RowTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($row::SELECT, $row->getLastAction());
         $this->assertSame(null, $row->getNextAction());
 
-        // mark fot deletion
+        // mark for deletion
         $row->setDelete(true);
         $this->assertSame($row::DELETE, $row->getNextAction());
 
-        $this->expectException(Exception::CLASS);
+        $this->expectException(Exception\UnexpectedOption::CLASS);
         $row->setLastAction('NO_SUCH_STATUS');
     }
 

@@ -15,7 +15,7 @@ class SimpleIdentityMapTest extends IdentityMapTest
 
     public function testGetSerial_arrayPrimaryValNotScalar()
     {
-        $this->expectException(Exception::class);
+        $this->expectException(Exception\PrimaryValueNotScalar::class);
         $this->expectExceptionMessage("Expected scalar value for primary key 'id', got array instead.");
         $this->identityMap->getSerial([]);
     }
@@ -24,7 +24,7 @@ class SimpleIdentityMapTest extends IdentityMapTest
     {
         $row = $this->table->newRow();
         $row->id = [];
-        $this->expectException(Exception::class);
+        $this->expectException(Exception\PrimaryValueNotScalar::class);
         $this->expectExceptionMessage("Expected scalar value for primary key 'id', got array instead.");
         $this->identityMap->getSerial($row);
     }

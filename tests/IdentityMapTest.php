@@ -45,7 +45,7 @@ abstract class IdentityMapTest extends \PHPUnit\Framework\TestCase
         $serial = $this->identityMap->getSerial($row);
         $rowClass = get_class($row);
 
-        $this->expectException(Exception::class);
+        $this->expectException(Exception\RowAlreadyIdentityMapped::class);
         $this->expectExceptionMessage(
             "{$rowClass} with serial {$serial} already exists in IdentityMap."
         );
@@ -77,18 +77,12 @@ abstract class IdentityMapTest extends \PHPUnit\Framework\TestCase
     {
         $rows = $this->identityMap->fetchRows(static::PRIMARY_VALS);
         $this->assertCount(2, $rows);
-        // $this->assertSame('1', $rows[0]->id);
-        // $this->assertSame('3', $rows[1]->id);
 
         $again = $this->identityMap->fetchRows(static::PRIMARY_VALS);
         $this->assertSame($rows, $again);
 
         $more = $this->identityMap->fetchRows(static::PRIMARY_VALS_MORE);
         $this->assertCount(4, $more);
-        // $this->assertSame('1', $more[0]->id);
-        // $this->assertSame('2', $more[1]->id);
-        // $this->assertSame('3', $more[2]->id);
-        // $this->assertSame('4', $more[3]->id);
         $this->assertSame($rows[0], $more[0]); // id 1 should be memorized
         $this->assertSame($rows[1], $more[2]); // id 3 should be memorized
     }
@@ -96,7 +90,7 @@ abstract class IdentityMapTest extends \PHPUnit\Framework\TestCase
     public function testGetSerial_typeError()
     {
         $expect = $this->table::ROW_CLASS;
-        $this->expectException(Exception::class);
+        $this->expectException(Exception\UnexpectedType::class);
         $this->expectExceptionMessage("Expected identity map row of type {$expect}, got Atlas\Table\Row@anonymous");
         $this->identityMap->getSerial(new class extends Row {});
     }

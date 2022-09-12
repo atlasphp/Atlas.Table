@@ -53,7 +53,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
     {
         $row = $this->table->fetchRow(1);
         $row->id = 2;
-        $this->expectException(Exception::CLASS);
+        $this->expectException(Exception\PrimaryValueChanged::CLASS);
         $this->expectExceptionMessage(
             "Primary key value for 'id' changed"
         );
@@ -129,7 +129,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
     {
         $table = $this->tableLocator->get(CourseTable::CLASS);
 
-        $this->expectException(Exception::CLASS);
+        $this->expectException(Exception\PrimaryValueMissing::CLASS);
         $this->expectExceptionMessage(
             "Expected scalar value for primary key 'course_number', value is missing instead."
         );
@@ -143,7 +143,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
     {
         $table = $this->tableLocator->get(CourseTable::CLASS);
 
-        $this->expectException(Exception::CLASS);
+        $this->expectException(Exception\PrimaryValueNotScalar::CLASS);
         $this->expectExceptionMessage(
             "Expected scalar value for primary key 'course_subject', got array instead."
         );
@@ -299,7 +299,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
 
         // try to insert again, should fail on unique name
         $this->silenceErrors();
-        $this->expectException(Exception::CLASS);
+        $this->expectException(Exception\UnexpectedRowCountAffected::CLASS);
         $this->expectExceptionMessage(
             "Expected 1 row affected, actual 0"
         );
@@ -347,7 +347,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
 
         // then modify and try to update, should fail
         $row->name = 'Annabelle Lee';
-        $this->expectException(Exception::CLASS);
+        $this->expectException(Exception\UnexpectedRowCountAffected::CLASS);
         $this->expectExceptionMessage('Expected 1 row affected, actual 0.');
         $this->table->updateRow($row);
     }
@@ -387,7 +387,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
 
         // sneaky sneaky
         $row->setLastAction($row::SELECT);
-        $this->expectException(Exception::CLASS);
+        $this->expectException(Exception\UnexpectedRowCountAffected::CLASS);
         $this->expectExceptionMessage(
             "Expected 1 row affected, actual 0"
         );
@@ -410,7 +410,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $table->insertRow($row);
 
         $row->email = 'boshag@example.org';
-        $this->expectException(Exception::CLASS);
+        $this->expectException(Exception\CannotPerformWithoutPrimaryKey::CLASS);
         $this->expectExceptionMessage("Cannot update row on table 'nopkeys' without primary key.");
 
         $table->updateRow($row);
@@ -426,7 +426,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $table->insertRow($row);
 
         $row->email = 'boshag@example.org';
-        $this->expectException(Exception::CLASS);
+        $this->expectException(Exception\CannotPerformWithoutPrimaryKey::CLASS);
         $this->expectExceptionMessage("Cannot delete row on table 'nopkeys' without primary key.");
 
         $table->deleteRow($row);

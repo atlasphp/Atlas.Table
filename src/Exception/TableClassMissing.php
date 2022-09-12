@@ -12,10 +12,10 @@ namespace Atlas\Table\Exception;
 
 use Atlas\Table\Exception;
 
-class ClassDoesNotExist extends Exception
+class TableClassMissing extends Exception
 {
     public function __construct(string $class)
     {
-        parent::__construct("Class '{$class}' does not exist.");
+        parent::__construct("Table class '{$class}' does not exist, or is not a Table.");
     }
 }

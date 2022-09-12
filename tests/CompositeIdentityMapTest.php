@@ -48,7 +48,7 @@ class CompositeIdentityMapTest extends IdentityMapTest
 
     public function testGetSerial_arrayPrimaryValNotScalar()
     {
-        $this->expectException(Exception::class);
+        $this->expectException(Exception\PrimaryValueNotScalar::class);
         $this->expectExceptionMessage("Expected scalar value for primary key 'course_subject', got array instead.");
         $this->identityMap->getSerial([
             'course_subject' => [],
@@ -59,7 +59,7 @@ class CompositeIdentityMapTest extends IdentityMapTest
     {
         $row = $this->table->newRow();
         $row->course_subject = [];
-        $this->expectException(Exception::class);
+        $this->expectException(Exception\PrimaryValueNotScalar::class);
         $this->expectExceptionMessage("Expected scalar value for primary key 'course_subject', got array instead.");
         $this->identityMap->getSerial($row);
     }
