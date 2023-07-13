@@ -6,7 +6,7 @@ Create a new Row using the `newRow()` method. You can assign data using
 properties, or pass an array of initial data to populate into the Row.
 
 ```php
-$threadRow = $atlas->newRow([
+$threadRow = $threadTable->newRow([
     'title' => 'New Thread Title',
 ]);
 ```
