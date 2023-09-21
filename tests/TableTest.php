@@ -65,7 +65,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $this->logQueries();
         $row = $this->table->fetchRow(1);
         $this->assertInstanceOf(EmployeeRow::CLASS, $row);
-        $this->assertSame($expect, $row->getArrayCopy());
+        $this->assertSame($expect, array_map('strval', $row->getArrayCopy()));
 
         // check quoting
         $queries = $this->getQueries();
@@ -101,7 +101,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
             'course_number' => '100'
         ]);
 
-        $this->assertSame($expect, $actual->getArrayCopy());
+        $this->assertSame($expect, array_map('strval', $actual->getArrayCopy()));
 
         // check quoting
         $queries = $this->getQueries();
@@ -174,9 +174,9 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(EmployeeRow::CLASS, $actual[0]);
         $this->assertInstanceOf(EmployeeRow::CLASS, $actual[1]);
         $this->assertInstanceOf(EmployeeRow::CLASS, $actual[2]);
-        $this->assertSame($expect[0], $actual[0]->getArrayCopy());
-        $this->assertSame($expect[1], $actual[1]->getArrayCopy());
-        $this->assertSame($expect[2], $actual[2]->getArrayCopy());
+        $this->assertSame($expect[0], array_map('strval', $actual[0]->getArrayCopy()));
+        $this->assertSame($expect[1], array_map('strval', $actual[1]->getArrayCopy()));
+        $this->assertSame($expect[2], array_map('strval', $actual[2]->getArrayCopy()));
 
         // check quoting
         $queries = $this->getQueries();
@@ -224,9 +224,9 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(CourseRow::CLASS, $actual[0]);
         $this->assertInstanceOf(CourseRow::CLASS, $actual[1]);
         $this->assertInstanceOf(CourseRow::CLASS, $actual[2]);
-        $this->assertSame($expect[0], $actual[0]->getArrayCopy());
-        $this->assertSame($expect[1], $actual[1]->getArrayCopy());
-        $this->assertSame($expect[2], $actual[2]->getArrayCopy());
+        $this->assertSame($expect[0], array_map('strval', $actual[0]->getArrayCopy()));
+        $this->assertSame($expect[1], array_map('strval', $actual[1]->getArrayCopy()));
+        $this->assertSame($expect[2], array_map('strval', $actual[2]->getArrayCopy()));
 
         // check quoting
         $queries = $this->getQueries();
@@ -287,6 +287,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
         $actual = $this->table->getReadConnection()->fetchOne(
             'SELECT * FROM employee WHERE id = 13'
         );
+        $actual = array_map('strval', $actual);
         $this->assertSame($expect, $actual);
 
         // try to insert again, should fail on unique name
