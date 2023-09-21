@@ -12,7 +12,7 @@ class TableSelectTest extends \PHPUnit\Framework\TestCase
 
     protected $table;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $connection = (new DataSourceFixture())->exec();
         $this->table = TableLocator::new($connection)->get(EmployeeTable::CLASS);
@@ -31,7 +31,7 @@ class TableSelectTest extends \PHPUnit\Framework\TestCase
         // success
         $actual = $this->select->where('id = ', '1')->fetchRow();
         $this->assertInstanceOf(EmployeeRow::CLASS, $actual);
-        $this->assertSame($expect, $actual->getArrayCopy());
+        $this->assertSame($expect, array_map('strval', $actual->getArrayCopy()));
 
         // failure
         $actual = $this->select->where('id = ', '-1')->fetchRow();
@@ -64,9 +64,9 @@ class TableSelectTest extends \PHPUnit\Framework\TestCase
         // success
         $actual = $this->select->where('id IN ', [1, 2, 3])->fetchRows();
         $this->assertCount(3, $actual);
-        $this->assertSame($expect[0], $actual[0]->getArrayCopy());
-        $this->assertSame($expect[1], $actual[1]->getArrayCopy());
-        $this->assertSame($expect[2], $actual[2]->getArrayCopy());
+        $this->assertSame($expect[0], array_map('strval', $actual[0]->getArrayCopy()));
+        $this->assertSame($expect[1], array_map('strval', $actual[1]->getArrayCopy()));
+        $this->assertSame($expect[2], array_map('strval', $actual[2]->getArrayCopy()));
 
         // failure
         $actual = $this->select->where('id IN ', [997, 998, 999])->fetchRows();

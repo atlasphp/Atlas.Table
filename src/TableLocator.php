@@ -20,7 +20,7 @@ class TableLocator
 
     protected $factory;
 
-    protected $tables = [];
+    protected $instances = [];
 
     public static function new(...$args) : TableLocator
     {
