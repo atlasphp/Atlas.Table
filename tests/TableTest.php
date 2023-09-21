@@ -22,7 +22,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
 
     protected $tableLocator;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $connection = (new DataSourceFixture())->exec();
         (new CompositeDataSourceFixture($connection))->exec();

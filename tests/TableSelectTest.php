@@ -12,7 +12,7 @@ class TableSelectTest extends \PHPUnit\Framework\TestCase
 
     protected $table;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $connection = (new DataSourceFixture())->exec();
         $this->table = TableLocator::new($connection)->get(EmployeeTable::CLASS);

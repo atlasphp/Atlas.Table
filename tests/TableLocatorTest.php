@@ -9,7 +9,9 @@ use Atlas\Testing\DataSourceFixture;
 
 class TableLocatorTest extends \PHPUnit\Framework\TestCase
 {
-    protected function setUp()
+    protected $tableLocator;
+
+    protected function setUp() : void
     {
         $connection = (new DataSourceFixture())->exec();
         $this->tableLocator = TableLocator::new($connection);
